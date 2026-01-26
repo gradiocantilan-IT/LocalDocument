@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cantilan Online Application Portal</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- html2pdf.js for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        'gov-blue': '#1e3a8a',
+                        'gov-gold': '#d97706',
+                        'gov-slate': '#334155',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Form Input Styling */
+        .form-input {
+            transition: all 0.2s;
+            border: 1px solid #cbd5e1;
+        }
+        .form-input:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+            outline: none;
+        }
+        
+        /* Print Styles (Applied during PDF generation) */
+        .pdf-page {
+            background: white;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            color: black; /* Ensure black text for print */
+            font-family: 'Times New Roman', Times, serif; /* Standard doc font */
+        }
+        
+        .pdf-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pdf-field {
+            border-bottom: 1px solid #333;
+            display: inline-block;
+            min-width: 100px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1e3a8a;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gov-blue text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-shield-halved text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-gov-blue leading-tight">Cantilan Portal</h1>
+                        <p class="text-[10px] text-slate-500 font-bold tracking-wider">ONLINE APPLICATION</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="app.goHome()" class="text-slate-600 hover:text-gov-blue font-medium text-sm">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Back to Selection
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="app-container" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <!-- Dynamic Content Injected Here -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs">
+            <p>&copy; 2023 Municipality of Cantilan. Secure Online Forms.</p>
+        </div>
+    </footer>
+
+    <!-- Application Logic -->
+    <script>
+        /**
+         * Cantilan Online Forms Application
+         * Handles routing, form generation, local storage, and PDF generation.
+         */
+        const app = {
+            container: document.getElementById('app-container'),
+            
+            // Data Models for Forms
+            forms: {
+                'business': {
+                    title: "Mayor's Permit Application",
+                    description: "For new businesses or annual renewals.",
+                    fields: [
+                        { id: 'date', label: 'Date of Application', type: 'date', required: true },
+                        { id: 'business_name', label: 'Business Name / Trade Name', type: 'text', required: true, placeholder: "e.g. Cantilan Fresh Seafood" },
+                        { id: 'business_address', label: 'Business Address', type: 'textarea', required: true, placeholder: "Street, Barangay, Cantilan, Surigao del Sur" },
+                        { id: 'business_type', label: 'Type of Business', type: 'select', options: ['Single Proprietorship', 'Partnership', 'Corporation', 'Cooperative'], required: true },
+                        { id: 'owner_name', label: 'Name of Owner / President', type: 'text', required: true, placeholder: "Surname, First Name, M.I." },
+                        { id: 'owner_address', label: 'Residence Address', type: 'text', required: true },
+                        { id: 'contact', label: 'Contact Number', type: 'tel', required: true },
+                        { id: 'capital', label: 'Estimated Capital Investment (PHP)', type: 'number', required: true },
+                        { id: 'dti_sec', label: 'DTI/SEC Registration No.', type: 'text', required: false },
+                        { id: 'tin', label: 'Tax Identification Number (TIN)', type: 'text', required: true },
+                        { id: 'employees', label: 'No. of Employees', type: 'number', required: true },
+                        { id: 'area', label: 'Total Floor Area (sqm)', type: 'number', required: true },
+                    ]
+                },
+                'barangay': {
+                    title: "Barangay Clearance",
+                    description: "Certificate of Residency and Good Moral Character.",
+                    fields: [
+                        { id: 'date', label: 'Date', type: 'date', required: true },
+                        { id: 'fullname', label: 'Full Name', type: 'text', required: true, placeholder: "First Middle Last" },
+                        { id: 'age', label: 'Age', type: 'number', required: true },
+                        { id: 'civil_status', label: 'Civil Status', type: 'select', options: ['Single', 'Married', 'Widowed', 'Separated'], required: true },
+                        { id: 'purok', label: 'Purok/Zone', type: 'text', required: true },
+                        { id: 'barangay_sel', label: 'Barangay', type: 'select', options: ['Poblacion', 'Magosilom', 'San Pedro', 'Consuelo', 'General Island'], required: true },
+                        { id: 'period', label: 'Period of Residency', type: 'text', required: true, placeholder: "e.g. 5 Years" },
+                        { id: 'purpose', label: 'Purpose', type: 'select', options: ['Employment', 'Bank Requirement', 'Police Clearance', 'School Requirement', 'Business Permit'], required: true },
+                        { id: 'id_presented', label: 'ID Presented', type: 'text', required: true, placeholder: "Voters ID / Passport / License" },
+                        { id: 'id_no', label: 'ID Number', type: 'text', required: true }
+                    ]
+                },
+                'building': {
+                    title: "Building Permit Application",
+                    description: "Application for construction of new buildings or renovation.",
+                    fields: [
+                        { id: 'date', label: 'Date', type: 'date', required: true },
+                        { id: 'owner_name', label: 'Applicant/Owner Name', type: 'text', required: true },
+                        { id: 'owner_address', label: 'Mailing Address', type: 'text', required: true },
+                        { id: 'project_loc', label: 'Project Location', type: 'text', required: true },
+                        { id: 'scope', label: 'Scope of Work', type: 'select', options: ['New Construction', 'Renovation', 'Erection', 'Addition', 'Repair', 'Demolition'], required: true },
+                        { id: 'use', label: 'Use or Character of Occupancy', type: 'select', options: ['Residential', 'Commercial', 'Industrial', 'Institutional', 'Agricultural'], required: true },
+                        { id: 'engineer', label: 'Design Professional (Engineer/Architect)', type: 'text', required: true },
+                        { id: 'engineer_address', label: 'Professional Address', type: 'text', required: true },
+                        { id: 'prc', label: 'PRC No.', type: 'text', required: true },
+                        { id: 'ptr', label: 'PTR No.', type: 'text', required: true },
+                        { id: 'tin', label: 'TIN', type: 'text', required: true }
+                    ]
+                }
+            },
+
+            // Initialize App
+            init() {
+                this.goHome();
+            },
+
+            // Render Home/Dashboard
+            goHome() {
+                this.container.innerHTML = `
+                    <div class="text-center mb-12 animate-fade-in">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Select a Permit to Fill Out</h2>
+                        <p class="text-slate-600 max-w-2xl mx-auto">Choose the document you need. You can save your progress and download the completed form as a PDF instantly.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        ${this.renderCard('business', 'fa-briefcase', 'Business Permit', "Mayor's Permit & Business License", 'bg-blue-50 text-blue-600')}
+                        ${this.renderCard('barangay', 'fa-house-chimney', 'Barangay Clearance', "Residency & Good Standing", 'bg-green-50 text-green-600')}
+                        ${this.renderCard('building', 'fa-trowel-bricks', 'Building Permit', "Construction & Renovation", 'bg-orange-50 text-orange-600')}
+                    </div>
+                `;
+            },
+
+            // Helper to render dashboard cards
+            renderCard(key, icon, title, desc, colorClass) {
+                return `
+                    <div onclick="app.loadForm('${key}')" class="group bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-gov-blue transition-all cursor-pointer transform hover:-translate-y-1">
+                        <div class="w-16 h-16 ${colorClass} rounded-full flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid ${icon}"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">${title}</h3>
+                        <p class="text-slate-500 mb-6">${desc}</p>
+                        <span class="text-gov-blue font-semibold flex items-center gap-2">
+                            Fill Out Form <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                    </div>
+                `;
+            },
+
+            // Load Specific Form
+            loadForm(formKey) {
+                const formData = this.forms[formKey];
+                const savedData = JSON.parse(localStorage.getItem(`form_${formKey}`) || '{}');
+
+                let formHtml = `
+                    <div class="max-w-3xl mx-auto">
+                        <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden mb-8">
+                            <div class="bg-gov-blue p-6 text-white flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-2xl font-bold">${formData.title}</h2>
+                                    <p class="text-blue-100 text-sm mt-1">${formData.description}</p>
+                                </div>
+                                <div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                                    <i class="fa-solid fa-pen-to-square text-xl"></i>
+                                </div>
+                            </div>
+                            
+                            <form id="active-form" onsubmit="event.preventDefault();" class="p-8 space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    ${formData.fields.map(field => this.renderField(field, savedData[field.id])).join('')}
+                                </div>
+                                
+                                <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-4 justify-end">
+                                    <button type="button" onclick="app.saveForm('${formKey}')" class="px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-lg hover:bg-slate-200 transition flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-floppy-disk"></i> Save Progress
+                                    </button>
+                                    <button type="button" onclick="app.downloadPDF('${formKey}')" class="px-6 py-3 bg-gov-blue text-white font-bold rounded-lg hover:bg-blue-800 transition shadow-lg flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-file-pdf"></i> Download PDF
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="save-status" class="text-center text-sm font-medium h-6 transition-opacity opacity-0 text-green-600">
+                            <i class="fa-solid fa-check-circle"></i> Progress Saved Successfully
+                        </div>
+                    </div>
+                `;
+                
+                this.container.innerHTML = formHtml;
+                window.scrollTo(0,0);
+            },
+
+            // Render individual input fields
+            renderField(field, savedValue) {
+                const value = savedValue || '';
+                const isTextarea = field.type === 'textarea';
+                const isSelect = field.type === 'select';
+                
+                const baseClass = "w-full px-4 py-2 rounded-lg form-input bg-slate-50 focus:bg-white";
+                
+                let inputHtml = '';
+                
+                if (isTextarea) {
+                    inputHtml = `<textarea id="${field.id}" name="${field.id}" rows="3" class="${baseClass}" placeholder="${field.placeholder || ''}">${value}</textarea>`;
+                } else if (isSelect) {
+                    inputHtml = `
+                        <select id="${field.id}" name="${field.id}" class="${baseClass}">
+                            <option value="" disabled ${!value ? 'selected' : ''}>Select...</option>
+                            ${field.options.map(opt => `<option value="${opt}" ${value === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                        </select>
+                    `;
+                } else {
+                    inputHtml = `<input type="${field.type}" id="${field.id}" name="${field.id}" value="${value}" class="${baseClass}" placeholder="${field.placeholder || ''}">`;
+                }
+
+                return `
+                    <div class="${field.type === 'textarea' ? 'md:col-span-2' : ''}">
+                        <label for="${field.id}" class="block text-sm font-semibold text-slate-700 mb-1">
+                            ${field.label} ${field.required ? '<span class="text-red-500">*</span>' : ''}
+                        </label>
+                        ${inputHtml}
+                    </div>
+                `;
+            },
+
+            // Save to LocalStorage
+            saveForm(formKey) {
+                const form = document.getElementById('active-form');
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => data[key] = value);
+                
+                localStorage.setItem(`form_${formKey}`, JSON.stringify(data));
+                
+                // Show success message
+                const status = document.getElementById('save-status');
+                status.classList.remove('opacity-0');
+                setTimeout(() => status.classList.add('opacity-0'), 3000);
+            },
+
+            // Generate and Download PDF
+            downloadPDF(formKey) {
+                // 1. Save first
+                this.saveForm(formKey);
+
+                // 2. Get Data
+                const data = JSON.parse(localStorage.getItem(`form_${formKey}`) || '{}');
+                const formConfig = this.forms[formKey];
+
+                // 3. Create Hidden PDF Container
+                const pdfId = 'pdf-content-' + Date.now();
+                const pdfContainer = document.createElement('div');
+                pdfContainer.id = pdfId;
+                pdfContainer.style.position = 'absolute';
+                pdfContainer.style.left = '-9999px';
+                document.body.appendChild(pdfContainer);
+
+                // 4. Build PDF HTML Content
+                pdfContainer.innerHTML = this.buildPDFTemplate(formConfig, data);
+
+                // 5. Generate PDF
+                const element = document.getElementById(pdfId);
+                const opt = {
+                    margin:       0.5,
+                    filename:     `Cantilan_${formKey}_${data.owner_name || data.fullname || 'Application'}.pdf`,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true },
+                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                // Show loading state on button
+                const btn = document.querySelector('button[onclick^="app.downloadPDF"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<div class="loader border-white border-t-transparent w-5 h-5 mr-2"></div> Generating...';
+                btn.disabled = true;
+
+                html2pdf().set(opt).from(element).save().then(() => {
+                    // Cleanup
+                    document.body.removeChild(element);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+            },
+
+            // Build the actual PDF layout HTML
+            buildPDFTemplate(config, data) {
+                // Helper to safely get value
+                const get = (id) => data[id] || '_________________';
+
+                // Common Header
+                const header = `
+                    <div class="pdf-header">
+                        <h1 style="font-size: 24px; margin:0; text-transform: uppercase;">Republic of the Philippines</h1>
+                        <h2 style="font-size: 20px; margin:5px 0;">MUNICIPALITY OF CANTILAN</h2>
+                        <h3 style="font-size: 18px; margin:5px 0; font-weight: normal;">Province of Surigao del Sur</h3>
+                        <div style="border-top: 2px solid black; margin-top: 10px; padding-top: 10px;">
+                            <h2 style="font-size: 22px; margin:0; font-weight: bold;">${config.title.toUpperCase()}</h2>
+                        </div>
+                    </div>
+                `;
+
+                // Dynamic Content based on form type
+                let bodyContent = '';
+
+                if (config.title.includes("Business")) {
+                    bodyContent = `
+                        <div style="margin-bottom: 20px;">
+                            <strong>Date:</strong> <span class="pdf-field">${get('date')}</span>
+                        </div>
+                        <h3 style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">BUSINESS INFORMATION</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr>
+                                <td style="padding: 8px; width: 40%;"><strong>Business Name:</strong></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('business_name')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;"><strong>Address:</strong></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('business_address')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;"><strong>Type:</strong></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('business_type')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;"><strong>TIN:</strong></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('tin')}</td>
+                            </tr>
+                        </table>
+
+                        <h3 style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">OWNER INFORMATION</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr>
+                                <td style="padding: 8px; width: 40%;"><strong>Name:</strong></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('owner_name')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;"><strong>Residence:</strong></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('owner_address')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;"><strong>Contact:</strong></td>
+                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('contact')}</td>
+                            </tr>
+                        </table>
+                        
+                        <div style="margin-top: 40px; border: 1px solid #000; padding: 15px;">
+                            <p style="margin:0; font-size: 12px;">
+                                <strong>OFFICIAL USE ONLY:</strong><br>
+                                Amount Paid: _____________ O.R. No: _____________ Date: _____________<br>
+                                <br>
+                                Processed by: _______________________
+                            </p>
+                        </div>
+                    `;
+                } else if (config.title.includes("Barangay")) {
+                    bodyContent = `
+                         <div style="text-align: right; margin-bottom: 20px;">
+                            <strong>Date:</strong> <span class="pdf-field">${get('date')}</span>
+                        </div>
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <h2 style="text-decoration: underline; font-size: 20px;">BARANGAY CLEARANCE</h2>
+                        </div>
+                        
+                        <p style="line-height: 1.8; text-align: justify; margin-bottom: 20px;">
+                            TO WHOM IT MAY CONCERN:
+                        </p>
+                        <p style="line-height: 1.8; text-align: justify; text-indent: 50px; margin-bottom: 20px;">
+                            This is to certify that <strong>${get('fullname')}</strong>, <strong>${get('age')}</strong> years old, 
+                            <strong>${get('civil_status')}</strong>, is a bona fide resident of Purok <strong>${get('purok')}</strong>, 
+                            Barangay <strong>${get('barangay_sel')}</strong>, Cantilan, Surigao del Sur for 
+                            <strong>${get('period')}</strong>.
+                        </p>
+                        <p style="line-height: 1.8; text-align: justify; text-indent: 50px; margin-bottom: 20px;">
+                            Further certifies that the above-named person is of good moral character, law-abiding citizen, 
+                            and has no derogatory record filed against him/her in this office.
+                        </p>
+                        <p style="line-height: 1.8; text-align: justify; text-indent: 50px; margin-bottom: 40px;">
+                            This clearance is being issued upon the request of the above-named person for 
+                            <strong>${get('purpose')}</strong> purposes.
+                        </p>
+
+                        <div style="width: 50%; margin-left: auto; text-align: center; margin-top: 60px;">
+                            <p style="border-bottom: 1px solid #000; margin-bottom: 5px;">&nbsp;</p>
+                            <p style="margin:0; font-weight: bold;">PUNONG BARANGAY</p>
+                            <p style="margin:0; font-size: 12px;">Barangay ${get('barangay_sel')}</p>
+                        </div>
+
+                        <div style="margin-top: 60px; font-size: 11px; border-top: 1px solid #ccc; padding-top: 10px;">
+                            <p>ID Presented: ${get('id_presented')} | ID No: ${get('id_no')}</p>
+                        </div>
+                    `;
+                } else if (config.title.includes("Building")) {
+                    bodyContent = `
+                        <div style="margin-bottom: 20px;">
+                            <strong>Date:</strong> <span class="pdf-field">${get('date')}</span>
+                        </div>
+                        <h3 style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">BOX 1 (TO BE ACCOMPLISHED BY THE OWNER/APPLICANT)</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #999;"><strong>OWNER/APPLICANT</strong><br>${get('owner_name')}</td>
+                                <td style="padding: 8px; border: 1px solid #999;"><strong>FORM OF OWNERSHIP</strong><br>Single</td>
+                                <td style="padding: 8px; border: 1px solid #999;"><strong>USE OR CHARACTER OF OCCUPANCY</strong><br>${get('use')}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding: 8px; border: 1px solid #999;">
+                                    <strong>ADDRESS:</strong> ${get('owner_address')}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding: 8px; border: 1px solid #999;">
+                                    <strong>LOCATION OF CONSTRUCTION:</strong> ${get('project_loc')}
+                                </td>
+                            </tr>
+                             <tr>
+                                <td colspan="3" style="padding: 8px; border: 1px solid #999;">
+                                    <strong>SCOPE OF WORK:</strong> ${get('scope')}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <h3 style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">BOX 2 (DESIGN PROFESSIONAL)</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #999;"><strong>NAME:</strong><br>${get('engineer')}</td>
+                                <td style="padding: 8px; border: 1px solid #999;"><strong>ADDRESS:</strong><br>${get('engineer_address')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #999;"><strong>PRC NO:</strong> ${get('prc')}</td>
+                                <td style="padding: 8px; border: 1px solid #999;"><strong>PTR NO:</strong> ${get('ptr')}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding: 8px; border: 1px solid #999;"><strong>TIN:</strong> ${get('tin')}</td>
+                            </tr>
+                        </table>
+                        
+                        <div style="margin-top: 40px;">
+                             <p style="font-size: 10px; text-align: justify;">
+                                <strong>IMPORTANT:</strong> This application is hereby made in accordance with the National Building Code of the Philippines (PD 1096) and its Implementing Rules and Regulations.
+                             </p>
+                        </div>
+                    `;
+                }
+
+                return `<div class="pdf-page">${header}${bodyContent}</div>`;
+            }
+        };
+
+        // Start App
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>
