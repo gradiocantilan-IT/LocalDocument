@@ -269,7 +269,7 @@
 
         <div class="overflow-hidden mb-8 max-w-lg mx-auto">
             <p class="text-emerald-100/80 text-base md:text-lg font-light opacity-0 translate-y-10" id="tagline">
-                The Cradle of Towns in Surigao del Sur
+                Cantilan – An Banwa nga Tinun-an nan Kasaysayan
             </p>
         </div>
 
@@ -284,6 +284,16 @@
             </span>
             <div class="absolute inset-0 bg-emerald-100 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
         </button>
+
+        <!-- Space between button and powered by -->
+        <div class="mt-12 mb-4"></div>
+
+        <!-- Powered by Smile Wifi -->
+        <div class="overflow-hidden">
+            <h3 class="text-emerald-300/60 text-xs md:text-sm tracking-[0.3em] uppercase font-medium opacity-0 translate-y-10" id="powered-by">
+                Powered by Smile Wifi
+            </h3>
+        </div>
 
         <!-- Keyboard Hint -->
         <div class="key-hint" id="key-hint">
@@ -388,7 +398,8 @@
               .to("#title", { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.6")
               .to("#business-express", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
               .to("#tagline", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
-              .to("#enter-btn", { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }, "-=0.4");
+              .to("#enter-btn", { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }, "-=0.4")
+              .to("#powered-by", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4");
         });
 
         // Start Video Function - Click or Enter
