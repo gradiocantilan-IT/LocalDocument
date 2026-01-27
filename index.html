@@ -82,6 +82,139 @@
             box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.2);
         }
 
+        /* Video Player Styles */
+        #video-container {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            background: #000;
+            display: none;
+            opacity: 0;
+        }
+
+        #intro-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 35;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        #video-container:hover .video-controls,
+        #video-container.paused .video-controls {
+            opacity: 1;
+        }
+
+        .control-btn {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.05);
+        }
+
+        .skip-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 35;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        #video-container:hover .skip-btn,
+        #video-container.paused .skip-btn {
+            opacity: 1;
+        }
+
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
+            z-index: 31;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            z-index: 36;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #34d399;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .key-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 2s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+        }
+
+        .key-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: white;
+            font-size: 11px;
+        }
+
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -130,18 +263,15 @@
         <!-- Mayor Image Section -->
         <div class="overflow-hidden mb-6 opacity-0 translate-y-10" id="mayor-section">
             <div class="relative mx-auto w-48 md:w-56 lg:w-64">
-                <!-- Decorative frame -->
                 <div class="absolute -inset-2 bg-gradient-to-b from-yellow-500/30 to-emerald-800/30 rounded-lg blur-sm"></div>
                 
                 <div class="mayor-frame relative bg-slate-900 rounded-lg overflow-hidden border-2 border-white/20">
-                    <img src="mayor.jpg" 
+                    <img src="image.png" 
                          alt="Hon. Rodrigo L. Eleazar - Municipal Mayor" 
                          class="w-full h-auto object-cover object-top">
                     
-                    <!-- Overlay gradient for text readability -->
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                     
-                    <!-- Text Overlay -->
                     <div class="absolute bottom-0 left-0 right-0 p-3 text-center">
                         <p class="text-[10px] md:text-xs text-emerald-300 uppercase tracking-widest mb-0.5">Municipal Mayor</p>
                         <h3 class="text-sm md:text-base font-bold text-white leading-tight">Hon. Rodrigo L. Eleazar</h3>
@@ -159,13 +289,19 @@
         <!-- Interactive Enter Button -->
         <button id="enter-btn" class="group relative px-8 py-4 bg-white text-emerald-900 font-bold rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transition-all duration-300 transform hover:scale-105 opacity-0 scale-90 overflow-hidden">
             <span class="relative z-10 flex items-center gap-2">
-                Enter Portal 
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
+                Enter Portal
             </span>
             <div class="absolute inset-0 bg-emerald-100 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
         </button>
+
+        <!-- Keyboard Hint -->
+        <div class="key-hint" id="key-hint">
+            Press <span class="key-badge">ENTER</span> to start
+        </div>
 
         <!-- Decorative Elements -->
         <div class="absolute bottom-10 left-10 text-xs text-emerald-400/50 font-mono hidden md:block">
@@ -178,9 +314,52 @@
         </div>
     </main>
 
-    <!-- Iframe Container (Hidden initially) -->
-    <div id="app-frame-container" class="fixed inset-0 z-40 bg-white opacity-0 pointer-events-none transition-opacity duration-500">
-        <iframe id="app-frame" src="index.html" class="w-full h-full border-0 no-scrollbar"></iframe>
+    <!-- Video Container -->
+    <div id="video-container">
+        <div class="video-overlay"></div>
+        
+        <video id="intro-video" playsinline>
+            <source src="intro.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Skip Button -->
+        <button class="skip-btn control-btn" onclick="skipVideo()">
+            <span>Skip Intro</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+            </svg>
+        </button>
+
+        <!-- Video Controls -->
+        <div class="video-controls">
+            <button class="control-btn" onclick="togglePlay()" id="play-pause-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="play-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="pause-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="play-text">Pause</span>
+            </button>
+            
+            <button class="control-btn" onclick="toggleMute()" id="mute-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="sound-on-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="sound-off-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                </svg>
+                <span id="mute-text">Sound On</span>
+            </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
     </div>
 
     <script>
@@ -199,73 +378,178 @@
             particleContainer.appendChild(p);
         }
 
-        // Entrance Animation Sequence
+        // Elements
+        const enterBtn = document.getElementById('enter-btn');
+        const videoContainer = document.getElementById('video-container');
+        const video = document.getElementById('intro-video');
+        const progressBar = document.getElementById('progress-bar');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const playText = document.getElementById('play-text');
+        const soundOnIcon = document.getElementById('sound-on-icon');
+        const soundOffIcon = document.getElementById('sound-off-icon');
+        const muteText = document.getElementById('mute-text');
+        const keyHint = document.getElementById('key-hint');
+
+        let isTransitioning = false;
+        let videoStarted = false;
+
+        // Entrance Animation
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
-
-            tl.to("#subtitle", {
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                ease: "power3.out"
-            })
-            .to("#title", {
-                y: 0,
-                opacity: 1,
-                duration: 1.2,
-                ease: "power3.out"
-            }, "-=0.6")
-            .to("#mayor-section", {
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                ease: "power3.out"
-            }, "-=0.6")
-            .to("#tagline", {
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                ease: "power3.out"
-            }, "-=0.6")
-            .to("#enter-btn", {
-                scale: 1,
-                opacity: 1,
-                duration: 0.8,
-                ease: "back.out(1.7)"
-            }, "-=0.4");
+            tl.to("#subtitle", { y: 0, opacity: 1, duration: 1, ease: "power3.out" })
+              .to("#title", { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.6")
+              .to("#mayor-section", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
+              .to("#tagline", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
+              .to("#enter-btn", { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }, "-=0.4");
         });
 
-        // Transition Logic
-        const enterBtn = document.getElementById('enter-btn');
-        const wipeTop = document.querySelector('.wipe-panel.top');
-        const wipeBottom = document.querySelector('.wipe-panel.bottom');
-        const appContainer = document.getElementById('app-frame-container');
-        const introContent = document.getElementById('intro-content');
-
-        enterBtn.addEventListener('click', () => {
+        // Start Video Function - Click or Enter
+        function startVideoWithSound() {
+            if (videoStarted || isTransitioning) return;
+            videoStarted = true;
+            
+            // Hide key hint
+            keyHint.style.display = 'none';
+            
             gsap.to(enterBtn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
             
             const tl = gsap.timeline({
                 onComplete: () => {
-                    appContainer.style.pointerEvents = 'auto';
-                    appContainer.style.opacity = '1';
-                    introContent.style.display = 'none';
+                    playVideoWithAudio();
                 }
             });
 
-            tl.to([wipeTop, wipeBottom], {
-                scaleY: 1,
+            tl.to("#intro-content", { opacity: 0, duration: 0.5 })
+              .set(videoContainer, { display: 'block' })
+              .to(videoContainer, { opacity: 1, duration: 0.5 });
+        }
+
+        // Button Click
+        enterBtn.addEventListener('click', startVideoWithSound);
+
+        // Enter Key Press
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Enter' && !videoStarted) {
+                e.preventDefault();
+                startVideoWithSound();
+            }
+        });
+
+        function playVideoWithAudio() {
+            // Always try to play with sound first
+            video.muted = false;
+            video.volume = 1;
+            
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Success - playing with sound
+                    updatePlayButton(true);
+                    updateMuteButton(false);
+                }).catch(error => {
+                    // Autoplay blocked - fallback to muted then unmute
+                    console.log("Autoplay with sound blocked, trying muted fallback");
+                    video.muted = true;
+                    video.play().then(() => {
+                        updatePlayButton(true);
+                        updateMuteButton(true);
+                        // Try to unmute after user interaction context
+                        setTimeout(() => {
+                            video.muted = false;
+                            updateMuteButton(false);
+                        }, 100);
+                    });
+                });
+            }
+        }
+
+        // Video Event Listeners
+        video.addEventListener('timeupdate', () => {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = `${progress}%`;
+        });
+
+        video.addEventListener('ended', () => {
+            redirectToHome();
+        });
+
+        video.addEventListener('click', () => {
+            togglePlay();
+        });
+
+        // Controls
+        function togglePlay() {
+            if (video.paused) {
+                video.play();
+                updatePlayButton(true);
+                videoContainer.classList.remove('paused');
+            } else {
+                video.pause();
+                updatePlayButton(false);
+                videoContainer.classList.add('paused');
+            }
+        }
+
+        function toggleMute() {
+            video.muted = !video.muted;
+            updateMuteButton(video.muted);
+        }
+
+        function updatePlayButton(isPlaying) {
+            if (isPlaying) {
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+                playText.textContent = 'Pause';
+            } else {
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+                playText.textContent = 'Play';
+            }
+        }
+
+        function updateMuteButton(isMuted) {
+            if (isMuted) {
+                soundOnIcon.classList.add('hidden');
+                soundOffIcon.classList.remove('hidden');
+                muteText.textContent = 'Sound Off';
+            } else {
+                soundOnIcon.classList.remove('hidden');
+                soundOffIcon.classList.add('hidden');
+                muteText.textContent = 'Sound On';
+            }
+        }
+
+        function skipVideo() {
+            redirectToHome();
+        }
+
+        function redirectToHome() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            gsap.to(videoContainer, {
+                opacity: 0,
                 duration: 0.8,
-                ease: "power4.inOut",
-                stagger: 0.1
-            })
-            .to(introContent, { opacity: 0, duration: 0.1 }, "-=0.4")
-            .to([wipeTop, wipeBottom], {
-                scaleY: 0,
-                duration: 0.8,
-                ease: "power4.inOut",
-                stagger: 0.1
+                onComplete: () => {
+                    window.location.href = 'home.html';
+                }
             });
+        }
+
+        // Additional keyboard shortcuts for video player
+        document.addEventListener('keydown', (e) => {
+            if (!videoStarted) return;
+            
+            if (e.code === 'Space') {
+                e.preventDefault();
+                togglePlay();
+            } else if (e.code === 'KeyM') {
+                toggleMute();
+            } else if (e.code === 'Escape') {
+                skipVideo();
+            }
         });
     </script>
 </body>
