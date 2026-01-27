@@ -10,25 +10,25 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:wght@400;700&display=swap');
         
         :root {
-            --cantilan-blue: #0038A8;
-            --cantilan-red: #CE1126;
-            --cantilan-gold: #FCD116;
-            --official-blue: #1e3a8a;
-            --official-red: #dc2626;
+            --cantilan-green: #065f46;
+            --cantilan-green-light: #10b981;
+            --cantilan-green-dark: #064e3b;
+            --cantilan-gold: #f59e0b;
+            --cantilan-gold-light: #fbbf24;
         }
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f0fdf4;
         }
         
         .serif {
             font-family: 'Merriweather', serif;
         }
         
-        /* Official Header Style */
+        /* Green Header Style */
         .official-header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0038A8 100%);
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
             border-bottom: 4px solid var(--cantilan-gold);
         }
         
@@ -43,25 +43,25 @@
         
         /* Gold Accent Button */
         .btn-gold {
-            background: linear-gradient(135deg, #FCD116 0%, #FFD700 100%);
-            color: #1e3a8a;
-            border: 2px solid #FCD116;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #064e3b;
+            border: 2px solid #f59e0b;
             font-weight: 700;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px -1px rgba(252, 209, 22, 0.4);
+            box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.4);
         }
         
         .btn-gold:hover {
-            background: linear-gradient(135deg, #FFD700 0%, #FCD116 100%);
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(252, 209, 22, 0.4);
+            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.4);
         }
         
-        /* Service Cards Matching Reference Site */
+        /* Service Cards */
         .service-card {
             background: white;
             border-radius: 12px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #d1fae5;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -74,7 +74,7 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, var(--cantilan-blue), var(--cantilan-red));
+            background: linear-gradient(90deg, #059669, #10b981);
             transform: scaleX(0);
             transition: transform 0.3s ease;
         }
@@ -82,7 +82,7 @@
         .service-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border-color: #0038A8;
+            border-color: #059669;
         }
         
         .service-card:hover::before {
@@ -90,8 +90,8 @@
         }
         
         .service-icon {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            color: #0038A8;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
         }
         
         /* Form Steps */
@@ -121,7 +121,7 @@
             right: -50%;
             width: 100%;
             height: 2px;
-            background: #e5e7eb;
+            background: #d1fae5;
             z-index: 0;
             transform: translateY(-50%);
         }
@@ -131,22 +131,22 @@
         }
         
         .progress-step.active .step-number {
-            background: #0038A8;
-            color: white;
-            border-color: #0038A8;
-        }
-        
-        .progress-step.completed .step-number {
             background: #059669;
             color: white;
             border-color: #059669;
+        }
+        
+        .progress-step.completed .step-number {
+            background: #065f46;
+            color: white;
+            border-color: #065f46;
         }
         
         .step-number {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            border: 2px solid #d1d5db;
+            border: 2px solid #a7f3d0;
             background: white;
             display: flex;
             align-items: center;
@@ -155,67 +155,67 @@
             position: relative;
             z-index: 1;
             transition: all 0.3s;
+            color: #065f46;
         }
         
         /* Document Upload */
         .document-preview {
-            border: 2px dashed #cbd5e1;
+            border: 2px dashed #a7f3d0;
             transition: all 0.2s;
-            background: #f8fafc;
+            background: #f0fdf4;
         }
         
         .document-preview:hover {
-            border-color: #0038A8;
-            background-color: #eff6ff;
+            border-color: #059669;
+            background-color: #d1fae5;
         }
         
         .document-preview.has-file {
             border-color: #059669;
-            background-color: #f0fdf4;
+            background-color: #ecfdf5;
             border-style: solid;
         }
         
-        /* Blue Theme Inputs */
+        /* Green Theme Inputs */
         .input-field:focus {
-            border-color: #0038A8;
-            box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.1);
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
         }
         
         /* Modal Styles */
         .modal-backdrop {
-            background-color: rgba(30, 58, 138, 0.6);
+            background-color: rgba(6, 78, 59, 0.6);
             backdrop-filter: blur(4px);
         }
         
         .login-gradient {
-            background: linear-gradient(135deg, #0038A8 0%, #1e3a8a 100%);
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
         }
         
         /* Status Badges */
         .badge-pending {
-            background: #FEF3C7;
-            color: #92400E;
-            border: 1px solid #FCD34D;
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
         }
         
         .badge-approved {
-            background: #D1FAE5;
-            color: #065F46;
-            border: 1px solid #6EE7B7;
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
         }
         
         /* Print Styles */
         @media print {
             .no-print { display: none !important; }
             body { background: white; }
-            .glass-panel { box-shadow: none; border: 1px solid #ccc; }
         }
         
         /* Loading Spinner */
         .loading-spinner {
             border: 3px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 3px solid #0038A8;
+            border-top: 3px solid #059669;
             width: 24px;
             height: 24px;
             animation: spin 1s linear infinite;
@@ -237,30 +237,41 @@
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
         
-        /* Accordion Style from Reference */
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        
-        .accordion-content.active {
-            max-height: 1000px;
-        }
-        
         /* Gold Top Bar */
         .top-bar {
-            background: var(--cantilan-gold);
-            color: #1e3a8a;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            color: #064e3b;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
         }
+        
+        /* Green Buttons */
+        .btn-green {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            border: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.4);
+        }
+        
+        .btn-green:hover {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4);
+        }
+        
+        .text-primary { color: #065f46; }
+        .bg-primary { background-color: #065f46; }
+        .border-primary { border-color: #059669; }
+        .hover\:text-primary:hover { color: #065f46; }
+        .hover\:bg-primary:hover { background-color: #065f46; }
     </style>
 </head>
-<body class="min-h-screen text-gray-800 bg-slate-50">
+<body class="min-h-screen text-gray-800 bg-emerald-50">
 
     <!-- Gold Top Bar -->
-    <div class="top-bar py-1 text-center no-print">
+    <div class="top-bar py-2 text-center no-print shadow-md">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <span><i class="fas fa-phone-alt mr-2"></i>Trunk Line: (086) XXX-XXXX</span>
             <span class="hidden md:inline"><i class="fas fa-envelope mr-2"></i>lgucantilan@example.gov.ph</span>
@@ -273,16 +284,16 @@
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-4 cursor-pointer" onclick="showDashboard()">
                 <!-- Cantilan Official Seal -->
-                <div class="seal-container w-16 h-16 md:w-20 md:h-20 bg-white rounded-full p-1 flex-shrink-0">
+                <div class="seal-container w-16 h-16 md:w-20 md:h-20 bg-white rounded-full p-1 flex-shrink-0 shadow-xl border-2 border-yellow-400">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Seal_of_Cantilan.png/600px-Seal_of_Cantilan.png" 
                          alt="Municipality of Cantilan Official Seal" 
                          class="w-full h-full object-contain rounded-full"
-                         onerror="this.src='https://via.placeholder.com/100?text=Seal'">
+                         onerror="this.src='image.png'">
                 </div>
                 <div class="border-l-2 border-yellow-400 pl-4">
-                    <p class="text-xs md:text-sm text-blue-100 font-medium tracking-wider">Republic of the Philippines</p>
+                    <p class="text-xs md:text-sm text-emerald-100 font-medium tracking-wider uppercase">Republic of the Philippines</p>
                     <h1 class="text-lg md:text-2xl font-bold leading-tight serif tracking-wide">Municipality of Cantilan</h1>
-                    <p class="text-xs md:text-sm text-blue-100">Province of Surigao del Sur</p>
+                    <p class="text-xs md:text-sm text-emerald-100">Province of Surigao del Sur</p>
                 </div>
             </div>
             
@@ -302,18 +313,19 @@
                 <div id="loggedInNav" class="hidden items-center space-x-3">
                     <div class="text-right hidden md:block">
                         <p class="text-sm font-bold text-white" id="userNameDisplay">Juan Dela Cruz</p>
-                        <p class="text-xs text-blue-200" id="userEmailDisplay">juan@email.com</p>
+                        <p class="text-xs text-emerald-200" id="userEmailDisplay">juan@email.com</p>
                     </div>
                     <div class="relative group">
-                        <button class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold border-2 border-yellow-400 hover:bg-yellow-50 transition">
+                        <button class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-emerald-800 font-bold border-2 border-yellow-400 hover:bg-yellow-50 transition shadow-md">
                             <i class="fas fa-user"></i>
                         </button>
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 hidden group-hover:block text-gray-800 border border-gray-200 z-50">
-                            <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-sm text-blue-900 font-medium">
-                                <i class="fas fa-user-circle mr-2 text-blue-600"></i>My Profile
+                        <!-- Dropdown -->
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 hidden group-hover:block text-gray-800 border border-emerald-100 z-50">
+                            <a href="#" class="block px-4 py-2 hover:bg-emerald-50 text-sm text-emerald-900 font-medium">
+                                <i class="fas fa-user-circle mr-2 text-emerald-600"></i>My Profile
                             </a>
-                            <a href="#" class="block px-4 py-2 hover:bg-blue-50 text-sm text-blue-900">
-                                <i class="fas fa-file-alt mr-2 text-blue-600"></i>My Applications
+                            <a href="#" class="block px-4 py-2 hover:bg-emerald-50 text-sm text-emerald-900">
+                                <i class="fas fa-file-alt mr-2 text-emerald-600"></i>My Applications
                             </a>
                             <div class="border-t border-gray-200 my-1"></div>
                             <a href="#" onclick="logout()" class="block px-4 py-2 hover:bg-red-50 text-sm text-red-600 font-medium">
@@ -332,24 +344,24 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobileMenu" class="hidden bg-blue-900 text-white p-4 md:hidden border-t border-blue-800">
+    <div id="mobileMenu" class="hidden bg-emerald-800 text-white p-4 md:hidden border-t border-emerald-700">
         <div id="mobileLoggedOut">
-            <a href="#" class="block py-3 border-b border-blue-800 hover:text-yellow-300" onclick="showDashboard()">Home</a>
-            <a href="#" class="block py-3 border-b border-blue-800 hover:text-yellow-300" onclick="showLoginModal()">Track Application</a>
-            <button onclick="showLoginModal()" class="w-full mt-3 btn-gold py-3 rounded-lg text-blue-900 font-bold">Login</button>
+            <a href="#" class="block py-3 border-b border-emerald-700 hover:text-yellow-300" onclick="showDashboard()">Home</a>
+            <a href="#" class="block py-3 border-b border-emerald-700 hover:text-yellow-300" onclick="showLoginModal()">Track Application</a>
+            <button onclick="showLoginModal()" class="w-full mt-3 btn-gold py-3 rounded-lg text-emerald-900 font-bold">Login</button>
         </div>
         <div id="mobileLoggedIn" class="hidden">
-            <div class="px-2 py-3 border-b border-blue-800 mb-2 flex items-center space-x-3">
-                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-900">
+            <div class="px-2 py-3 border-b border-emerald-700 mb-2 flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-emerald-900">
                     <i class="fas fa-user"></i>
                 </div>
                 <div>
                     <p class="font-bold" id="mobileUserName">User</p>
-                    <p class="text-xs text-blue-200" id="mobileUserEmail">email</p>
+                    <p class="text-xs text-emerald-200" id="mobileUserEmail">email</p>
                 </div>
             </div>
-            <a href="#" class="block py-3 border-b border-blue-800 hover:text-yellow-300">My Applications</a>
-            <a href="#" class="block py-3 border-b border-blue-800 hover:text-yellow-300">Profile</a>
+            <a href="#" class="block py-3 border-b border-emerald-700 hover:text-yellow-300">My Applications</a>
+            <a href="#" class="block py-3 border-b border-emerald-700 hover:text-yellow-300">Profile</a>
             <a href="#" class="block py-3 text-red-300 hover:text-red-200" onclick="logout()">Logout</a>
         </div>
     </div>
@@ -359,13 +371,13 @@
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-95 opacity-0" id="loginModalContent">
             <div class="login-gradient p-6 text-white text-center relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
-                <div class="w-20 h-20 bg-white rounded-full mx-auto mb-3 p-2 flex items-center justify-center">
+                <div class="w-20 h-20 bg-white rounded-full mx-auto mb-3 p-2 flex items-center justify-center shadow-lg border-2 border-yellow-400">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Seal_of_Cantilan.png/600px-Seal_of_Cantilan.png" 
                          class="w-full h-full object-contain" alt="Seal"
-                         onerror="this.src='https://via.placeholder.com/80?text=Seal'">
+                         onerror="this.src='smilelogo.png'">
                 </div>
                 <h2 class="text-2xl font-bold serif">Cantilan Business Express</h2>
-                <p class="text-blue-100 text-sm mt-1">Secure Login Portal</p>
+                <p class="text-emerald-100 text-sm mt-1">Secure Login Portal</p>
             </div>
             
             <div class="p-6 space-y-4">
@@ -379,11 +391,11 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                             <div class="relative">
-                                <span class="absolute left-3 top-3 text-blue-600">
+                                <span class="absolute left-3 top-3 text-emerald-600">
                                     <i class="fas fa-envelope"></i>
                                 </span>
                                 <input type="email" id="loginEmail" required 
-                                    class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100 transition"
+                                    class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 transition"
                                     placeholder="you@example.com" value="demo@cantilan.gov.ph">
                             </div>
                         </div>
@@ -391,13 +403,13 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                             <div class="relative">
-                                <span class="absolute left-3 top-3 text-blue-600">
+                                <span class="absolute left-3 top-3 text-emerald-600">
                                     <i class="fas fa-lock"></i>
                                 </span>
                                 <input type="password" id="loginPassword" required 
-                                    class="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100 transition"
+                                    class="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 transition"
                                     placeholder="••••••••" value="password123">
-                                <button type="button" onclick="togglePassword()" class="absolute right-3 top-3 text-gray-400 hover:text-blue-800 transition">
+                                <button type="button" onclick="togglePassword()" class="absolute right-3 top-3 text-gray-400 hover:text-emerald-600 transition">
                                     <i class="fas fa-eye" id="toggleIcon"></i>
                                 </button>
                             </div>
@@ -405,14 +417,14 @@
 
                         <div class="flex items-center justify-between text-sm">
                             <label class="flex items-center cursor-pointer">
-                                <input type="checkbox" class="rounded border-gray-300 text-blue-800 focus:ring-blue-800">
+                                <input type="checkbox" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-600">
                                 <span class="ml-2 text-gray-600">Remember me</span>
                             </label>
-                            <a href="#" class="text-blue-800 hover:underline font-medium">Forgot password?</a>
+                            <a href="#" class="text-emerald-700 hover:underline font-semibold">Forgot password?</a>
                         </div>
 
                         <button type="submit" id="loginBtn" 
-                            class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition shadow-lg flex items-center justify-center space-x-2 border-b-4 border-blue-950 active:border-b-0 active:translate-y-1">
+                            class="w-full bg-emerald-700 text-white py-3 rounded-lg font-bold hover:bg-emerald-800 transition shadow-lg flex items-center justify-center space-x-2 border-b-4 border-emerald-800 active:border-b-0 active:translate-y-1">
                             <span>Login</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
@@ -429,7 +441,7 @@
                 </div>
 
                 <button onclick="showRegisterModal()" 
-                    class="w-full border-2 border-blue-900 text-blue-900 py-3 rounded-lg font-bold hover:bg-blue-50 transition">
+                    class="w-full border-2 border-emerald-700 text-emerald-700 py-3 rounded-lg font-bold hover:bg-emerald-50 transition">
                     Create Account
                 </button>
 
@@ -444,9 +456,9 @@
     <!-- Registration Modal -->
     <div id="registerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg my-8 transform transition-all scale-95 opacity-0" id="registerModalContent">
-            <div class="bg-gradient-to-r from-blue-900 to-blue-800 p-6 text-white text-center">
+            <div class="bg-gradient-to-r from-emerald-700 to-emerald-800 p-6 text-white text-center">
                 <h2 class="text-2xl font-bold serif">Create Account</h2>
-                <p class="text-blue-200 text-sm mt-1">Join Cantilan Business Express</p>
+                <p class="text-emerald-100 text-sm mt-1">Join Cantilan Business Express</p>
             </div>
             
             <div class="p-6 space-y-4">
@@ -454,56 +466,56 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-                            <input type="text" id="regFirstName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100">
+                            <input type="text" id="regFirstName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100">
                         </div>
                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-                            <input type="text" id="regLastName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100">
+                            <input type="text" id="regLastName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
-                        <input type="email" id="regEmail" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100">
+                        <input type="email" id="regEmail" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
-                        <input type="tel" id="regMobile" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100" placeholder="09XX XXX XXXX">
+                        <input type="tel" id="regMobile" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" placeholder="09XX XXX XXXX">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Address in Cantilan *</label>
-                        <input type="text" id="regAddress" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100" placeholder="Barangay, Cantilan, Surigao del Sur">
+                        <input type="text" id="regAddress" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" placeholder="Barangay, Cantilan, Surigao del Sur">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
-                            <input type="password" id="regPassword" required minlength="8" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100">
+                            <input type="password" id="regPassword" required minlength="8" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label>
-                            <input type="password" id="regConfirmPassword" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-100">
+                            <input type="password" id="regConfirmPassword" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100">
                         </div>
                     </div>
 
                     <div class="flex items-start space-x-2 pt-2">
-                        <input type="checkbox" id="agreeTerms" required class="mt-1 rounded border-gray-300 text-blue-800 focus:ring-blue-800">
+                        <input type="checkbox" id="agreeTerms" required class="mt-1 rounded border-gray-300 text-emerald-600 focus:ring-emerald-600">
                         <label for="agreeTerms" class="text-xs text-gray-600">
-                            I agree to the <a href="#" class="text-blue-800 hover:underline font-medium">Terms of Service</a> and 
-                            <a href="#" class="text-blue-800 hover:underline font-medium">Privacy Policy</a>. I consent to the processing of my personal data in accordance with RA 10173 (Data Privacy Act of 2012).
+                            I agree to the <a href="#" class="text-emerald-700 hover:underline font-semibold">Terms of Service</a> and 
+                            <a href="#" class="text-emerald-700 hover:underline font-semibold">Privacy Policy</a>. I consent to the processing of my personal data in accordance with RA 10173 (Data Privacy Act of 2012).
                         </label>
                     </div>
 
-                    <button type="submit" id="registerBtn" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition shadow-lg border-b-4 border-blue-950 active:border-b-0 active:translate-y-1">
+                    <button type="submit" id="registerBtn" class="w-full bg-emerald-700 text-white py-3 rounded-lg font-bold hover:bg-emerald-800 transition shadow-lg border-b-4 border-emerald-800 active:border-b-0 active:translate-y-1">
                         Create Account
                     </button>
                 </form>
 
                 <div class="text-center text-sm text-gray-600">
                     Already have an account? 
-                    <a href="#" onclick="switchToLogin()" class="text-blue-800 font-bold hover:underline">Login here</a>
+                    <a href="#" onclick="switchToLogin()" class="text-emerald-700 font-bold hover:underline">Login here</a>
                 </div>
 
                 <button onclick="closeRegisterModal()" class="w-full text-gray-500 text-sm hover:text-gray-700 py-2 font-medium">
@@ -520,10 +532,10 @@
         <div id="dashboard" class="space-y-8">
             <!-- Hero Section -->
             <div class="text-center space-y-4 mb-12">
-                <div class="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-bold mb-2 border border-blue-200">
+                <div class="inline-block px-4 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm font-bold mb-2 border border-emerald-200 shadow-sm">
                     <i class="fas fa-shield-alt mr-2"></i>Official Government Portal
                 </div>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 serif tracking-tight">
+                <h2 class="text-4xl md:text-5xl font-bold text-emerald-900 serif tracking-tight">
                     Cantilan Business Express
                 </h2>
                 <p class="text-gray-600 max-w-2xl mx-auto text-lg">
@@ -531,9 +543,9 @@
                     zoning certifications, and locational clearances.
                 </p>
                 <div class="flex justify-center gap-6 text-sm text-gray-500 mt-6 flex-wrap">
-                    <span class="flex items-center font-medium"><i class="fas fa-check-circle text-blue-600 mr-2"></i>BPLO Accredited</span>
-                    <span class="flex items-center font-medium"><i class="fas fa-check-circle text-blue-600 mr-2"></i>MPDC Verified</span>
-                    <span class="flex items-center font-medium"><i class="fas fa-check-circle text-blue-600 mr-2"></i>24/7 Online Access</span>
+                    <span class="flex items-center font-semibold text-emerald-700"><i class="fas fa-check-circle text-emerald-600 mr-2"></i>BPLO Accredited</span>
+                    <span class="flex items-center font-semibold text-emerald-700"><i class="fas fa-check-circle text-emerald-600 mr-2"></i>MPDC Verified</span>
+                    <span class="flex items-center font-semibold text-emerald-700"><i class="fas fa-check-circle text-emerald-600 mr-2"></i>24/7 Online Access</span>
                 </div>
             </div>
 
@@ -550,10 +562,10 @@
                             please login or register to proceed.
                         </p>
                         <div class="flex space-x-3">
-                            <button onclick="showLoginModal()" class="px-4 py-2 bg-blue-900 text-white rounded-lg text-sm font-bold hover:bg-blue-800 transition">
+                            <button onclick="showLoginModal()" class="px-4 py-2 bg-emerald-700 text-white rounded-lg text-sm font-bold hover:bg-emerald-800 transition shadow-md">
                                 Login to Continue
                             </button>
-                            <button onclick="showRegisterModal()" class="px-4 py-2 border-2 border-blue-900 text-blue-900 rounded-lg text-sm font-bold hover:bg-blue-50 transition">
+                            <button onclick="showRegisterModal()" class="px-4 py-2 border-2 border-emerald-700 text-emerald-700 rounded-lg text-sm font-bold hover:bg-emerald-50 transition">
                                 Register New Account
                             </button>
                         </div>
@@ -568,16 +580,16 @@
                     <div class="w-16 h-16 service-icon rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-store"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-900 transition">Business Permit</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-emerald-700 transition">Business Permit</h3>
                     <p class="text-gray-600 text-sm mb-4">
                         Mayor's Permit & Business License for new applications, renewals, and additional businesses.
                     </p>
-                    <ul class="text-left text-sm text-gray-600 space-y-2 mb-6 bg-gray-50 p-3 rounded-lg">
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Unified Application Form</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Sanitary & Fire Permits</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Zoning Clearance</li>
+                    <ul class="text-left text-sm text-gray-600 space-y-2 mb-6 bg-emerald-50/50 p-3 rounded-lg">
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Unified Application Form</li>
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Sanitary & Fire Permits</li>
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Zoning Clearance</li>
                     </ul>
-                    <button class="w-full py-2.5 bg-blue-900 text-white rounded-lg font-bold hover:bg-blue-800 transition shadow-md">
+                    <button class="w-full py-2.5 bg-emerald-700 text-white rounded-lg font-bold hover:bg-emerald-800 transition shadow-md">
                         Apply Now
                     </button>
                 </div>
@@ -587,16 +599,16 @@
                     <div class="w-16 h-16 service-icon rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-900 transition">Zoning Certification</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-emerald-700 transition">Zoning Certification</h3>
                     <p class="text-gray-600 text-sm mb-4">
                         Verify land use compliance and zoning classification from the Municipal Planning & Development Office.
                     </p>
-                    <ul class="text-left text-sm text-gray-600 space-y-2 mb-6 bg-gray-50 p-3 rounded-lg">
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Vicinity Map Review</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Land Use Verification</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Property Rights Check</li>
+                    <ul class="text-left text-sm text-gray-600 space-y-2 mb-6 bg-emerald-50/50 p-3 rounded-lg">
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Vicinity Map Review</li>
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Land Use Verification</li>
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Property Rights Check</li>
                     </ul>
-                    <button class="w-full py-2.5 bg-blue-900 text-white rounded-lg font-bold hover:bg-blue-800 transition shadow-md">
+                    <button class="w-full py-2.5 bg-emerald-700 text-white rounded-lg font-bold hover:bg-emerald-800 transition shadow-md">
                         Apply Now
                     </button>
                 </div>
@@ -606,42 +618,42 @@
                     <div class="w-16 h-16 service-icon rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-building"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-900 transition">Locational Clearance</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-emerald-700 transition">Locational Clearance</h3>
                     <p class="text-gray-600 text-sm mb-4">
                         HLURB-compliant clearance for new developments, renovations, and construction projects.
                     </p>
-                    <ul class="text-left text-sm text-gray-600 space-y-2 mb-6 bg-gray-50 p-3 rounded-lg">
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Project Evaluation</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Environmental Check</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2 text-xs"></i>Development Approval</li>
+                    <ul class="text-left text-sm text-gray-600 space-y-2 mb-6 bg-emerald-50/50 p-3 rounded-lg">
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Project Evaluation</li>
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Environmental Check</li>
+                        <li class="flex items-center"><i class="fas fa-check text-emerald-600 mr-2 text-xs"></i>Development Approval</li>
                     </ul>
-                    <button class="w-full py-2.5 bg-blue-900 text-white rounded-lg font-bold hover:bg-blue-800 transition shadow-md">
+                    <button class="w-full py-2.5 bg-emerald-700 text-white rounded-lg font-bold hover:bg-emerald-800 transition shadow-md">
                         Apply Now
                     </button>
                 </div>
             </div>
 
             <!-- Process Steps -->
-            <div class="bg-white rounded-2xl shadow-lg p-8 mb-12 border border-gray-200">
-                <h3 class="text-2xl font-bold text-center mb-8 text-blue-900 serif">General Filing Process</h3>
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-12 border border-emerald-100">
+                <h3 class="text-2xl font-bold text-center mb-8 text-emerald-900 serif">General Filing Process</h3>
                 <div class="grid md:grid-cols-4 gap-6">
                     <div class="text-center space-y-3 relative">
-                        <div class="w-12 h-12 bg-blue-900 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto border-4 border-blue-100">1</div>
+                        <div class="w-12 h-12 bg-emerald-700 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto border-4 border-emerald-100 shadow-lg">1</div>
                         <h4 class="font-bold text-gray-900">Barangay Level</h4>
                         <p class="text-sm text-gray-600">Secure Barangay Clearance from your local Barangay Captain</p>
                     </div>
                     <div class="text-center space-y-3 relative">
-                        <div class="w-12 h-12 bg-blue-900 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto border-4 border-blue-100">2</div>
+                        <div class="w-12 h-12 bg-emerald-700 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto border-4 border-emerald-100 shadow-lg">2</div>
                         <h4 class="font-bold text-gray-900">Zoning & Health</h4>
                         <p class="text-sm text-gray-600">Obtain Locational Clearance (MPDC) and Health/Sanitary Permit</p>
                     </div>
                     <div class="text-center space-y-3 relative">
-                        <div class="w-12 h-12 bg-blue-900 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto border-4 border-blue-100">3</div>
+                        <div class="w-12 h-12 bg-emerald-700 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto border-4 border-emerald-100 shadow-lg">3</div>
                         <h4 class="font-bold text-gray-900">Fire & Safety</h4>
                         <p class="text-sm text-gray-600">Secure Fire Safety Inspection Certificate from BFP</p>
                     </div>
                     <div class="text-center space-y-3 relative">
-                        <div class="w-12 h-12 bg-blue-900 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto border-4 border-blue-100">4</div>
+                        <div class="w-12 h-12 bg-emerald-700 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto border-4 border-emerald-100 shadow-lg">4</div>
                         <h4 class="font-bold text-gray-900">Mayor's Office</h4>
                         <p class="text-sm text-gray-600">Submit all to BPLO for the official Mayor's Permit</p>
                     </div>
@@ -649,17 +661,17 @@
             </div>
 
             <!-- Recent Applications -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+            <div class="bg-white rounded-2xl shadow-lg p-6 border border-emerald-100">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-blue-900 flex items-center">
-                        <i class="fas fa-history text-blue-600 mr-2"></i>
+                    <h3 class="text-lg font-bold text-emerald-900 flex items-center">
+                        <i class="fas fa-history text-emerald-600 mr-2"></i>
                         Recent Applications
                     </h3>
-                    <button onclick="showLoginModal()" id="viewAllBtn" class="text-sm text-blue-800 hover:underline font-bold">Login to view all</button>
+                    <button onclick="showLoginModal()" id="viewAllBtn" class="text-sm text-emerald-700 hover:underline font-bold">Login to view all</button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
-                        <thead class="bg-gray-50 text-gray-700 border-b border-gray-200">
+                        <thead class="bg-emerald-50 text-emerald-800 border-b border-emerald-200">
                             <tr>
                                 <th class="px-4 py-3 text-left font-semibold">Reference No.</th>
                                 <th class="px-4 py-3 text-left font-semibold">Permit Type</th>
@@ -684,45 +696,45 @@
         <!-- Application Form -->
         <div id="applicationForm" class="hidden space-y-6">
             <div class="flex items-center justify-between mb-6 no-print">
-                <button onclick="showDashboard()" class="text-blue-900 hover:text-blue-700 flex items-center font-medium">
+                <button onclick="showDashboard()" class="text-emerald-800 hover:text-emerald-600 flex items-center font-bold transition">
                     <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
                 </button>
-                <div class="text-sm text-gray-600 bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
-                    App ID: <span class="font-mono font-bold text-blue-900" id="appIdDisplay">-</span>
+                <div class="text-sm text-gray-600 bg-white px-4 py-2 rounded-lg border border-emerald-200 shadow-sm">
+                    App ID: <span class="font-mono font-bold text-emerald-800" id="appIdDisplay">-</span>
                 </div>
             </div>
 
             <!-- Progress Steps -->
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 no-print">
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-emerald-100 no-print">
                 <div class="flex justify-between relative">
                     <div class="progress-step flex-1 text-center ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}" id="progStep1">
                         <div class="step-number mx-auto mb-2">1</div>
-                        <p class="text-xs font-medium text-gray-600">Classification</p>
+                        <p class="text-xs font-semibold text-gray-600">Classification</p>
                     </div>
                     <div class="progress-step flex-1 text-center ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}" id="progStep2">
                         <div class="step-number mx-auto mb-2">2</div>
-                        <p class="text-xs font-medium text-gray-600">Information</p>
+                        <p class="text-xs font-semibold text-gray-600">Information</p>
                     </div>
                     <div class="progress-step flex-1 text-center ${currentStep >= 3 ? 'active' : ''} ${currentStep > 3 ? 'completed' : ''}" id="progStep3">
                         <div class="step-number mx-auto mb-2">3</div>
-                        <p class="text-xs font-medium text-gray-600">Documents</p>
+                        <p class="text-xs font-semibold text-gray-600">Documents</p>
                     </div>
                     <div class="progress-step flex-1 text-center ${currentStep >= 4 ? 'active' : ''}" id="progStep4">
                         <div class="step-number mx-auto mb-2">4</div>
-                        <p class="text-xs font-medium text-gray-600">Review</p>
+                        <p class="text-xs font-semibold text-gray-600">Review</p>
                     </div>
                 </div>
             </div>
 
-            <div id="formContainer" class="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-200 min-h-[400px]">
+            <div id="formContainer" class="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-emerald-100 min-h-[400px]">
                 <!-- Dynamic content -->
             </div>
 
             <div class="flex justify-between no-print">
-                <button id="prevBtn" onclick="prevStep()" class="hidden px-6 py-3 border-2 border-gray-300 rounded-lg font-bold text-gray-700 hover:bg-gray-50 hover:border-blue-900 hover:text-blue-900 transition">
+                <button id="prevBtn" onclick="prevStep()" class="hidden px-6 py-3 border-2 border-gray-300 rounded-lg font-bold text-gray-700 hover:bg-gray-50 hover:border-emerald-600 hover:text-emerald-700 transition">
                     <i class="fas fa-arrow-left mr-2"></i>Previous
                 </button>
-                <button id="nextBtn" onclick="nextStep()" class="ml-auto px-8 py-3 bg-blue-900 text-white rounded-lg font-bold hover:bg-blue-800 transition flex items-center shadow-lg border-b-4 border-blue-950 active:border-b-0 active:translate-y-1">
+                <button id="nextBtn" onclick="nextStep()" class="ml-auto px-8 py-3 bg-emerald-700 text-white rounded-lg font-bold hover:bg-emerald-800 transition flex items-center shadow-lg border-b-4 border-emerald-800 active:border-b-0 active:translate-y-1">
                     <span>Next Step</span>
                     <i class="fas fa-chevron-right ml-2"></i>
                 </button>
@@ -731,23 +743,23 @@
 
         <!-- Success Modal -->
         <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 modal-backdrop">
-            <div class="bg-white rounded-2xl max-w-md w-full p-8 text-center transform transition-all scale-95 opacity-0 shadow-2xl border-4 border-blue-100" id="successModalContent">
-                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-4xl mx-auto mb-4 border-4 border-green-200">
+            <div class="bg-white rounded-2xl max-w-md w-full p-8 text-center transform transition-all scale-95 opacity-0 shadow-2xl border-4 border-emerald-100" id="successModalContent">
+                <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-4xl mx-auto mb-4 border-4 border-emerald-200">
                     <i class="fas fa-check-circle"></i>
                 </div>
-                <h3 class="text-2xl font-bold mb-2 text-blue-900 serif">Application Submitted!</h3>
+                <h3 class="text-2xl font-bold mb-2 text-emerald-900 serif">Application Submitted!</h3>
                 <p class="text-gray-600 mb-6">
                     Your application has been successfully filed with the Municipality of Cantilan.
                 </p>
-                <div class="bg-blue-50 p-4 rounded-lg mb-6 border-2 border-dashed border-blue-300">
-                    <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-1">Reference Number</p>
-                    <p class="text-2xl font-mono font-bold text-blue-900" id="successRefNo">-</p>
+                <div class="bg-emerald-50 p-4 rounded-lg mb-6 border-2 border-dashed border-emerald-300">
+                    <p class="text-xs text-emerald-700 font-bold uppercase tracking-wider mb-1">Reference Number</p>
+                    <p class="text-2xl font-mono font-bold text-emerald-800" id="successRefNo">-</p>
                 </div>
                 <div class="space-y-3">
                     <button onclick="printApplication()" class="w-full py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-bold text-gray-700 transition">
                         <i class="fas fa-print mr-2"></i>Print Application
                     </button>
-                    <button onclick="showDashboard()" class="w-full py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-800 font-bold transition shadow-md">
+                    <button onclick="showDashboard()" class="w-full py-3 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 font-bold transition shadow-md">
                         <i class="fas fa-home mr-2"></i>Return to Dashboard
                     </button>
                 </div>
@@ -755,39 +767,39 @@
         </div>
 
         <!-- Contact Section -->
-        <div class="mt-12 bg-blue-900 text-white rounded-2xl p-8 shadow-xl">
+        <div class="mt-12 bg-emerald-800 text-white rounded-2xl p-8 shadow-xl border-t-4 border-yellow-400">
             <div class="grid md:grid-cols-3 gap-8 text-center">
                 <div>
                     <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-map-marker-alt text-yellow-400 text-xl"></i>
                     </div>
                     <h4 class="font-bold mb-1">Municipal Hall</h4>
-                    <p class="text-sm text-blue-200">Cantilan, Surigao del Sur</p>
-                    <p class="text-xs text-blue-300 mt-1">Monday - Friday, 8:00 AM - 5:00 PM</p>
+                    <p class="text-sm text-emerald-200">Cantilan, Surigao del Sur</p>
+                    <p class="text-xs text-emerald-300 mt-1">Monday - Friday, 8:00 AM - 5:00 PM</p>
                 </div>
                 <div>
                     <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-phone-alt text-yellow-400 text-xl"></i>
                     </div>
                     <h4 class="font-bold mb-1">Trunk Line</h4>
-                    <p class="text-sm text-blue-200">(086) XXX-XXXX</p>
-                    <p class="text-xs text-blue-300 mt-1">Call during office hours</p>
+                    <p class="text-sm text-emerald-200">(086) XXX-XXXX</p>
+                    <p class="text-xs text-emerald-300 mt-1">Call during office hours</p>
                 </div>
                 <div>
                     <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
                         <i class="fas fa-envelope text-yellow-400 text-xl"></i>
                     </div>
                     <h4 class="font-bold mb-1">Email Support</h4>
-                    <p class="text-sm text-blue-200">lgucantilan@example.gov.ph</p>
-                    <p class="text-xs text-blue-300 mt-1">Response within 2-3 business days</p>
+                    <p class="text-sm text-emerald-200">lgucantilan@example.gov.ph</p>
+                    <p class="text-xs text-emerald-300 mt-1">Response within 2-3 business days</p>
                 </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <footer class="mt-8 text-center text-sm text-gray-500 pb-8">
+        <footer class="mt-8 text-center text-sm text-gray-600 pb-8">
             <p>&copy; 2024 Municipality of Cantilan, Surigao del Sur. All rights reserved.</p>
-            <p class="mt-1">Official Government Portal | Republic of the Philippines</p>
+            <p class="mt-1 font-medium text-emerald-700">Official Government Portal | Republic of the Philippines</p>
         </footer>
     </div>
 
@@ -804,17 +816,17 @@
         const permitTypes = {
             business: {
                 title: "Unified Business Permit",
-                color: "blue",
+                color: "emerald",
                 steps: ["Classification", "Information", "Documents", "Review"]
             },
             zoning: {
                 title: "Zoning Certification",
-                color: "green",
+                color: "emerald",
                 steps: ["Type", "Details", "Documents", "Review"]
             },
             locational: {
                 title: "Locational Clearance",
-                color: "purple",
+                color: "emerald",
                 steps: ["Nature", "Project Info", "Requirements", "Review"]
             }
         };
@@ -1106,12 +1118,12 @@
             const nextBtn = document.getElementById('nextBtn');
             if (currentStep === totalSteps) {
                 nextBtn.innerHTML = '<span>Submit Application</span><i class="fas fa-paper-plane ml-2"></i>';
-                nextBtn.classList.remove('bg-blue-900', 'hover:bg-blue-800');
-                nextBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                nextBtn.classList.remove('bg-emerald-700', 'hover:bg-emerald-800', 'border-emerald-800');
+                nextBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700', 'border-emerald-700');
             } else {
                 nextBtn.innerHTML = '<span>Next Step</span><i class="fas fa-chevron-right ml-2"></i>';
-                nextBtn.classList.add('bg-blue-900', 'hover:bg-blue-800');
-                nextBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                nextBtn.classList.add('bg-emerald-700', 'hover:bg-emerald-800', 'border-emerald-800');
+                nextBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700', 'border-emerald-700');
             }
         }
 
@@ -1175,17 +1187,16 @@
         }
 
         function renderBusinessStep(container) {
-            // Simplified for space - same logic as previous but styled with new theme
             if (currentStep === 1) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Application Classification</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Application Classification</h3>
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-3">Application Type *</label>
                                 <div class="grid md:grid-cols-3 gap-4">
                                     ${['New', 'Renewal', 'Additional'].map(type => `
-                                        <div class="border-2 ${formData.appType === type ? 'border-blue-900 bg-blue-50' : 'border-gray-200'} rounded-xl p-4 cursor-pointer hover:border-blue-900 transition text-center" 
+                                        <div class="border-2 ${formData.appType === type ? 'border-emerald-700 bg-emerald-50' : 'border-gray-200'} rounded-xl p-4 cursor-pointer hover:border-emerald-600 transition text-center" 
                                              onclick="selectOption('appType', '${type}')">
                                             <input type="radio" name="appType" value="${type}" class="hidden" ${formData.appType === type ? 'checked' : ''}>
                                             <div class="font-bold text-lg text-gray-900">${type}</div>
@@ -1210,24 +1221,24 @@
             } else if (currentStep === 2) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Business Information</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Business Information</h3>
                         <div class="space-y-6">
-                            <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
-                                <h4 class="font-bold text-blue-900 mb-4">Business Details</h4>
+                            <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-200">
+                                <h4 class="font-bold text-emerald-900 mb-4">Business Details</h4>
                                 <div class="grid md:grid-cols-2 gap-4">
                                     <div class="md:col-span-2">
                                         <label class="block text-sm font-bold text-gray-700 mb-1">Business Name *</label>
-                                        <input type="text" name="businessName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                        <input type="text" name="businessName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                                value="${formData.businessName || ''}" onchange="updateFormData(this)">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-bold text-gray-700 mb-1">DTI/SEC Reg. No. *</label>
-                                        <input type="text" name="regNumber" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                        <input type="text" name="regNumber" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                                value="${formData.regNumber || ''}" onchange="updateFormData(this)">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-bold text-gray-700 mb-1">Business Type</label>
-                                        <select name="businessType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" onchange="updateFormData(this)">
+                                        <select name="businessType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" onchange="updateFormData(this)">
                                             <option>Sole Proprietorship</option>
                                             <option>Partnership</option>
                                             <option>Corporation</option>
@@ -1242,17 +1253,17 @@
                                 <div class="grid md:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-sm font-bold text-gray-700 mb-1">Surname *</label>
-                                        <input type="text" name="ownerSurname" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                        <input type="text" name="ownerSurname" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                                value="${formData.ownerSurname || ''}" onchange="updateFormData(this)">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-bold text-gray-700 mb-1">First Name *</label>
-                                        <input type="text" name="ownerFirstName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                        <input type="text" name="ownerFirstName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                                value="${formData.ownerFirstName || ''}" onchange="updateFormData(this)">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-bold text-gray-700 mb-1">TIN *</label>
-                                        <input type="text" name="tin" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                        <input type="text" name="tin" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                                value="${formData.tin || ''}" onchange="updateFormData(this)">
                                     </div>
                                 </div>
@@ -1263,7 +1274,7 @@
             } else if (currentStep === 3) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Documentary Requirements</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Documentary Requirements</h3>
                         <div class="space-y-4">
                             ${[
                                 {name: 'dti_reg', label: 'DTI/SEC Registration', required: true},
@@ -1277,7 +1288,7 @@
                                            onchange="handleFileUpload(this, '${doc.name}', '${doc.label}')">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center space-x-3">
-                                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-900">
+                                            <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-700">
                                                 <i class="fas fa-file-alt text-xl"></i>
                                             </div>
                                             <div>
@@ -1285,11 +1296,11 @@
                                                 <p class="text-xs text-gray-500 status-text">Click to upload PDF or Image</p>
                                             </div>
                                         </div>
-                                        <i class="fas fa-cloud-upload-alt text-gray-400"></i>
+                                        <i class="fas fa-cloud-upload-alt text-emerald-400"></i>
                                     </div>
-                                    <div class="uploaded-file hidden mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                    <div class="uploaded-file hidden mt-3 p-3 bg-emerald-50 rounded-lg border border-emerald-200">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-sm text-green-700 font-medium filename-display"><i class="fas fa-check-circle mr-2"></i>Uploaded</span>
+                                            <span class="text-sm text-emerald-700 font-medium filename-display"><i class="fas fa-check-circle mr-2"></i>Uploaded</span>
                                             <button onclick="event.stopPropagation(); removeFile('${doc.name}')" class="text-red-500 hover:text-red-700">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -1309,17 +1320,17 @@
             if (currentStep === 1) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Zoning Application Type</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Zoning Application Type</h3>
                         <div class="grid md:grid-cols-2 gap-6">
-                            <div class="border-2 ${formData.zoningType === 'Certification' ? 'border-blue-900 bg-blue-50' : 'border-gray-200'} rounded-xl p-6 cursor-pointer hover:border-blue-900 transition" 
+                            <div class="border-2 ${formData.zoningType === 'Certification' ? 'border-emerald-700 bg-emerald-50' : 'border-gray-200'} rounded-xl p-6 cursor-pointer hover:border-emerald-600 transition" 
                                  onclick="selectOption('zoningType', 'Certification')">
-                                <div class="text-4xl mb-3 text-blue-900"><i class="fas fa-certificate"></i></div>
+                                <div class="text-4xl mb-3 text-emerald-700"><i class="fas fa-certificate"></i></div>
                                 <h4 class="font-bold text-lg">Zoning Certification</h4>
                                 <p class="text-sm text-gray-600 mt-2">Verify land use compliance</p>
                             </div>
-                            <div class="border-2 ${formData.zoningType === 'Clearance' ? 'border-blue-900 bg-blue-50' : 'border-gray-200'} rounded-xl p-6 cursor-pointer hover:border-blue-900 transition" 
+                            <div class="border-2 ${formData.zoningType === 'Clearance' ? 'border-emerald-700 bg-emerald-50' : 'border-gray-200'} rounded-xl p-6 cursor-pointer hover:border-emerald-600 transition" 
                                  onclick="selectOption('zoningType', 'Clearance')">
-                                <div class="text-4xl mb-3 text-blue-900"><i class="fas fa-check-circle"></i></div>
+                                <div class="text-4xl mb-3 text-emerald-700"><i class="fas fa-check-circle"></i></div>
                                 <h4 class="font-bold text-lg">Zoning Clearance</h4>
                                 <p class="text-sm text-gray-600 mt-2">For construction projects</p>
                             </div>
@@ -1329,27 +1340,27 @@
             } else if (currentStep === 2) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Property Details</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Property Details</h3>
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-1">Applicant Name *</label>
-                                <input type="text" name="applicantName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                <input type="text" name="applicantName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                        value="${formData.applicantName || currentUser?.fullName || ''}" onchange="updateFormData(this)">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-1">Property Location (Street, Barangay) *</label>
-                                <input type="text" name="propertyLocation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                <input type="text" name="propertyLocation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                        value="${formData.propertyLocation || ''}" onchange="updateFormData(this)">
                             </div>
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-bold text-gray-700 mb-1">Lot Area (hectares) *</label>
-                                    <input type="number" step="0.001" name="lotArea" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                    <input type="number" step="0.001" name="lotArea" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                            value="${formData.lotArea || ''}" onchange="updateFormData(this)">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold text-gray-700 mb-1">Right over Land *</label>
-                                    <select name="landRight" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" onchange="updateFormData(this)">
+                                    <select name="landRight" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" onchange="updateFormData(this)">
                                         <option value="">Select...</option>
                                         <option value="Owner" ${formData.landRight === 'Owner' ? 'selected' : ''}>Owner</option>
                                         <option value="Lessee" ${formData.landRight === 'Lessee' ? 'selected' : ''}>Lessee</option>
@@ -1362,13 +1373,13 @@
             } else if (currentStep === 3) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Requirements Upload</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Requirements Upload</h3>
                         <div class="space-y-4">
                             <div class="document-preview p-4 rounded-xl bg-white cursor-pointer" onclick="document.getElementById('file_vicinity').click();">
                                 <input type="file" id="file_vicinity" class="hidden" onchange="handleFileUpload(this, 'vicinity', 'Vicinity Map')">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-700">
+                                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-700">
                                             <i class="fas fa-map text-xl"></i>
                                         </div>
                                         <div>
@@ -1376,11 +1387,11 @@
                                             <p class="text-xs text-gray-500">Drawn to scale</p>
                                         </div>
                                     </div>
-                                    <i class="fas fa-upload text-gray-400"></i>
+                                    <i class="fas fa-upload text-emerald-400"></i>
                                 </div>
-                                <div class="uploaded-file hidden mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                <div class="uploaded-file hidden mt-3 p-3 bg-emerald-50 rounded-lg border border-emerald-200">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-sm text-green-700 font-medium"><i class="fas fa-check-circle mr-2"></i>Uploaded</span>
+                                        <span class="text-sm text-emerald-700 font-medium"><i class="fas fa-check-circle mr-2"></i>Uploaded</span>
                                         <button onclick="event.stopPropagation(); removeFile('vicinity')" class="text-red-500"><i class="fas fa-trash"></i></button>
                                     </div>
                                 </div>
@@ -1397,13 +1408,13 @@
             if (currentStep === 1) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Project Classification</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Project Classification</h3>
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-3">Project Nature *</label>
                                 <div class="grid md:grid-cols-2 gap-4">
                                     ${['New Development', 'Renovation', 'Expansion', 'Temporary'].map(type => `
-                                        <div class="border-2 ${formData.projectNature === type ? 'border-blue-900 bg-blue-50' : 'border-gray-200'} rounded-xl p-4 cursor-pointer hover:border-blue-900 transition text-center" 
+                                        <div class="border-2 ${formData.projectNature === type ? 'border-emerald-700 bg-emerald-50' : 'border-gray-200'} rounded-xl p-4 cursor-pointer hover:border-emerald-600 transition text-center" 
                                              onclick="selectOption('projectNature', '${type}')">
                                             <div class="font-bold text-gray-900">${type}</div>
                                         </div>
@@ -1412,7 +1423,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-1">Project Name *</label>
-                                <input type="text" name="projectName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                <input type="text" name="projectName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                        value="${formData.projectName || ''}" onchange="updateFormData(this)">
                             </div>
                         </div>
@@ -1421,7 +1432,7 @@
             } else if (currentStep === 2) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Project Details</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Project Details</h3>
                         <div class="space-y-4">
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>
@@ -1430,13 +1441,13 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold text-gray-700 mb-1">Project Cost (PHP) *</label>
-                                    <input type="number" name="projectCost" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                    <input type="number" name="projectCost" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                            value="${formData.projectCost || ''}" onchange="updateFormData(this)">
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-1">Project Location *</label>
-                                <input type="text" name="projectLocation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-900" 
+                                <input type="text" name="projectLocation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" 
                                        value="${formData.projectLocation || ''}" onchange="updateFormData(this)">
                             </div>
                         </div>
@@ -1445,7 +1456,7 @@
             } else if (currentStep === 3) {
                 container.innerHTML = `
                     <div class="form-step active">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">HLURB Requirements</h3>
+                        <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">HLURB Requirements</h3>
                         <div class="grid md:grid-cols-2 gap-4">
                             ${[
                                 {name: 'plan', label: 'Site Development Plan', icon: 'blueprint'},
@@ -1454,7 +1465,7 @@
                                 <div class="document-preview p-4 rounded-xl bg-white cursor-pointer" onclick="document.getElementById('file_${doc.name}').click();">
                                     <input type="file" id="file_${doc.name}" class="hidden" onchange="handleFileUpload(this, '${doc.name}', '${doc.label}')">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-700">
+                                        <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-700">
                                             <i class="fas fa-${doc.icon}"></i>
                                         </div>
                                         <div>
@@ -1475,7 +1486,7 @@
         function renderReviewStep(container) {
             container.innerHTML = `
                 <div class="form-step active">
-                    <h3 class="text-2xl font-bold mb-6 text-blue-900 serif">Review & Submit</h3>
+                    <h3 class="text-2xl font-bold mb-6 text-emerald-900 serif">Review & Submit</h3>
                     <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4 mb-6">
                         <div class="flex items-start space-x-3">
                             <i class="fas fa-exclamation-triangle text-amber-600 mt-1"></i>
@@ -1488,14 +1499,14 @@
                         </div>
                     </div>
                     
-                    <div class="bg-blue-50 rounded-lg p-4 border border-blue-200 mb-6">
-                        <h4 class="font-bold text-blue-900 mb-2">Logged in as:</h4>
+                    <div class="bg-emerald-50 rounded-lg p-4 border border-emerald-200 mb-6">
+                        <h4 class="font-bold text-emerald-900 mb-2">Logged in as:</h4>
                         <p class="text-gray-700">${currentUser?.fullName || currentUser?.firstName} (${currentUser?.email})</p>
                     </div>
 
                     <div class="border-t pt-6">
                         <label class="flex items-start space-x-3 cursor-pointer">
-                            <input type="checkbox" required class="mt-1 w-5 h-5 text-blue-900 rounded border-gray-300 focus:ring-blue-900" id="declarationCheck">
+                            <input type="checkbox" required class="mt-1 w-5 h-5 text-emerald-700 rounded border-gray-300 focus:ring-emerald-700" id="declarationCheck">
                             <span class="text-sm text-gray-700 leading-relaxed">
                                 I confirm that all information provided is accurate and I authorize the Municipality of Cantilan to verify these details. I understand that false information may result in denial of the permit and possible legal action.
                             </span>
@@ -1609,12 +1620,12 @@
             }
             
             tbody.innerHTML = userApps.map(app => `
-                <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
-                    <td class="px-4 py-3 font-mono text-blue-900 font-bold">${app.ref}</td>
+                <tr class="border-b border-gray-100 hover:bg-emerald-50 transition">
+                    <td class="px-4 py-3 font-mono text-emerald-800 font-bold">${app.ref}</td>
                     <td class="px-4 py-3">${app.type}</td>
                     <td class="px-4 py-3">${app.date}</td>
                     <td class="px-4 py-3"><span class="badge-pending px-2 py-1 rounded-full text-xs font-bold">${app.status}</span></td>
-                    <td class="px-4 py-3"><button class="text-blue-900 hover:underline text-sm font-bold">View</button></td>
+                    <td class="px-4 py-3"><button class="text-emerald-700 hover:underline text-sm font-bold">View</button></td>
                 </tr>
             `).join('');
         }
