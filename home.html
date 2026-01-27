@@ -1,22 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cantilan Online Application Portal</title>
-    
-    <!-- Tailwind CSS -->
+    <title>Cantilan Business Permits & Public Documents Guide</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- html2pdf.js for PDF Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -26,508 +16,591 @@
                         serif: ['Merriweather', 'serif'],
                     },
                     colors: {
-                        'gov-blue': '#1e3a8a',
-                        'gov-gold': '#d97706',
+                        'gov-blue': '#15803d',
+                        'gov-gold': '#ca8a04',
                         'gov-slate': '#334155',
+                        'gov-light': '#f8fafc',
                     }
                 }
             }
         }
     </script>
-
     <style>
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Form Input Styling */
-        .form-input {
-            transition: all 0.2s;
-            border: 1px solid #cbd5e1;
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .form-input:focus {
-            border-color: #1e3a8a;
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
-            outline: none;
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Accordion Transition */
+        .accordion-content {
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .accordion-content.active {
+            max-height: 1000px; /* Arbitrary large number */
         }
         
-        /* Print Styles (Applied during PDF generation) */
-        .pdf-page {
-            background: white;
-            padding: 40px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e2e8f0;
-            color: black; /* Ensure black text for print */
-            font-family: 'Times New Roman', Times, serif; /* Standard doc font */
+        .checklist-item:checked + label {
+            text-decoration: line-through;
+            color: #94a3b8;
         }
-        
-        .pdf-header {
-            text-align: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .pdf-field {
-            border-bottom: 1px solid #333;
-            display: inline-block;
-            min-width: 100px;
-            text-align: center;
-            margin: 0 5px;
-        }
-
-        /* Loading Spinner */
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #1e3a8a;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
+<base target="_blank">
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
     <!-- Navigation -->
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-3">
-                    <div class="bg-gov-blue text-white p-2 rounded-lg">
-                        <i class="fa-solid fa-shield-halved text-xl"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-lg font-bold text-gov-blue leading-tight">Cantilan Portal</h1>
-                        <p class="text-[10px] text-slate-500 font-bold tracking-wider">ONLINE APPLICATION</p>
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-3">
+                        <!-- Cantilan Municipality Official Seal -->
+                        <div class="relative">
+                            <img src="image.png" alt="Municipality of Cantilan Official Seal" class="h-12 w-12 object-contain rounded-full border-2 border-green-700 shadow-sm">
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-green-700 leading-tight">Cantilan Guide</h1>
+                            <p class="text-xs text-slate-500 font-medium tracking-wide">SURIGAO DEL SUR</p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button onclick="app.goHome()" class="text-slate-600 hover:text-gov-blue font-medium text-sm">
-                        <i class="fa-solid fa-arrow-left mr-1"></i> Back to Selection
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#services" class="text-slate-600 hover:text-green-700 font-medium transition">Services</a>
+                    <a href="#requirements" class="text-slate-600 hover:text-green-700 font-medium transition">Requirements</a>
+                    <a href="#steps" class="text-slate-600 hover:text-green-700 font-medium transition">Steps</a>
+                    <a href="#contact" class="text-slate-600 hover:text-green-700 font-medium transition">Contact</a>
+                    <a href="#checklist" class="bg-green-700 text-white px-5 py-2.5 rounded-full font-medium hover:bg-green-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        My Checklist
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-slate-600 hover:text-green-700 focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full shadow-lg">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#services" onclick="toggleMobileMenu()" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-green-700 hover:bg-slate-50">Services</a>
+                <a href="#requirements" onclick="toggleMobileMenu()" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-green-700 hover:bg-slate-50">Requirements</a>
+                <a href="#steps" onclick="toggleMobileMenu()" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-green-700 hover:bg-slate-50">Steps</a>
+                <a href="#checklist" onclick="toggleMobileMenu()" class="block px-3 py-3 mt-4 text-center rounded-md text-base font-medium bg-green-700 text-white hover:bg-green-800">My Checklist</a>
+            </div>
+        </div>
     </nav>
 
-    <!-- Main Content Area -->
-    <main id="app-container" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <!-- Dynamic Content Injected Here -->
-    </main>
+    <!-- Hero Section -->
+    <div class="relative bg-green-700 overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pattern-grid-lg"></div> <!-- Decorative pattern placeholder -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
+            <div class="text-center md:text-left md:w-2/3">
+                <div class="inline-flex items-center px-3 py-1 rounded-full bg-green-800 bg-opacity-50 text-green-100 text-sm font-medium mb-6 border border-green-700">
+                    <span class="flex h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                    Public Service Information
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 font-serif tracking-tight leading-tight">
+                    Start Your Business in <span class="text-yellow-400">Cantilan</span> with Confidence.
+                </h1>
+                <p class="text-lg md:text-xl text-green-100 mb-8 max-w-2xl leading-relaxed">
+                    Your comprehensive guide to securing business permits, barangay clearances, and public documents in Cantilan, Surigao del Sur.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a href="#requirements" class="px-8 py-4 bg-white text-green-700 font-bold rounded-lg shadow-lg hover:bg-gray-100 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-signature"></i> View Requirements
+                    </a>
+                    <a href="#contact" class="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-green-700 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-phone"></i> Contact Office
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative Illustration -->
+        <div class="hidden lg:block absolute right-0 bottom-0 w-1/3 h-full opacity-20 pointer-events-none">
+             <i class="fa-solid fa-building-columns text-[400px] text-white absolute -bottom-10 -right-10"></i>
+        </div>
+    </div>
+
+    <!-- Quick Links / Services Grid -->
+    <section id="services" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Essential Services</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Select a service below to view specific requirements and procedures.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="group bg-white rounded-xl border border-slate-200 p-6 hover:shadow-xl hover:border-green-700 transition duration-300 cursor-pointer" onclick="scrollToSection('accordion-business')">
+                    <div class="w-14 h-14 bg-green-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-800 transition duration-300">
+                        <i class="fa-solid fa-store text-2xl text-green-700 group-hover:text-white transition duration-300"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Business Permit</h3>
+                    <p class="text-sm text-slate-500 mb-4">Mayor's Permit & Business License for new and renewing businesses.</p>
+                    <span class="text-green-700 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Read More <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group bg-white rounded-xl border border-slate-200 p-6 hover:shadow-xl hover:border-green-700 transition duration-300 cursor-pointer" onclick="scrollToSection('accordion-barangay')">
+                    <div class="w-14 h-14 bg-green-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-600 transition duration-300">
+                        <i class="fa-solid fa-house-chimney text-2xl text-green-600 group-hover:text-white transition duration-300"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Barangay Clearance</h3>
+                    <p class="text-sm text-slate-500 mb-4">Residency and good moral character certification from your barangay.</p>
+                    <span class="text-green-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Read More <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group bg-white rounded-xl border border-slate-200 p-6 hover:shadow-xl hover:border-green-700 transition duration-300 cursor-pointer" onclick="scrollToSection('accordion-bldg')">
+                    <div class="w-14 h-14 bg-orange-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-orange-500 transition duration-300">
+                        <i class="fa-solid fa-trowel-bricks text-2xl text-orange-500 group-hover:text-white transition duration-300"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Building Permit</h3>
+                    <p class="text-sm text-slate-500 mb-4">Construction and renovation permits for residential and commercial.</p>
+                    <span class="text-orange-500 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Read More <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="group bg-white rounded-xl border border-slate-200 p-6 hover:shadow-xl hover:border-green-700 transition duration-300 cursor-pointer" onclick="scrollToSection('accordion-docs')">
+                    <div class="w-14 h-14 bg-purple-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-600 transition duration-300">
+                        <i class="fa-solid fa-folder-open text-2xl text-purple-600 group-hover:text-white transition duration-300"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Public Documents</h3>
+                    <p class="text-sm text-slate-500 mb-4">Requesting local civil registry records and other public files.</p>
+                    <span class="text-purple-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Read More <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Requirements Accordion -->
+    <section id="requirements" class="py-16 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Detailed Requirements</h2>
+                <p class="text-slate-600">Click on a topic to expand and view the necessary documents and fees.</p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- Accordion Item 1 -->
+                <div id="accordion-business" class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white hover:bg-slate-50 transition" onclick="toggleAccordion('business-content', this)">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-green-100 p-2 rounded-full text-green-700"><i class="fa-solid fa-briefcase"></i></div>
+                            <span class="font-bold text-lg text-slate-800">Business Permit (Mayor's Permit)</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="business-content" class="accordion-content bg-slate-50">
+                        <div class="p-6 border-t border-slate-200">
+                            <div class="mb-4">
+                                <h4 class="font-bold text-slate-700 mb-2">New Application Requirements:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-slate-600 ml-2">
+                                    <li>Barangay Business Clearance (from your respective barangay)</li>
+                                    <li>DTI Registration (Business Name) or SEC Registration (Corporation)</li>
+                                    <li>Contract of Lease (if renting) or Tax Declaration (if owned)</li>
+                                    <li>Locational Clearance from Zoning Office</li>
+                                    <li>Sanitary Permit (from Municipal Health Office)</li>
+                                    <li>Fire Safety Inspection Certificate (BFP)</li>
+                                    <li>Environmental Compliance Certificate (if applicable)</li>
+                                    <li>Picture of Establishment (2x2 or actual photo)</li>
+                                </ul>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-4">
+                                <p class="text-sm text-green-800"><i class="fa-solid fa-circle-info mr-2"></i><strong>Note:</strong> Fees vary depending on business type and capital. Please visit the Treasurer's Office for assessment.</p>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-200">
+                                <a href="https://forms.gle/example-business-permit-form" target="_blank" class="inline-flex items-center gap-2 bg-green-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                    File Application Form Online
+                                </a>
+                                <p class="text-xs text-slate-500 mt-2 ml-1">Click to submit your business permit application electronically</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 2 -->
+                <div id="accordion-barangay" class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white hover:bg-slate-50 transition" onclick="toggleAccordion('barangay-content', this)">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-green-100 p-2 rounded-full text-green-600"><i class="fa-solid fa-id-card"></i></div>
+                            <span class="font-bold text-lg text-slate-800">Barangay Clearance / Residency</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="barangay-content" class="accordion-content bg-slate-50">
+                        <div class="p-6 border-t border-slate-200">
+                            <div class="mb-4">
+                                <h4 class="font-bold text-slate-700 mb-2">Requirements:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-slate-600 ml-2">
+                                    <li>Proof of Residency (Utility Bill, Rental Agreement)</li>
+                                    <li>Valid ID (Passport, Driver's License, Voter's ID)</li>
+                                    <li>Application Form (available at Barangay Hall)</li>
+                                    <li>Community Tax Certificate (Cedula) - sometimes required depending on purpose</li>
+                                </ul>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-4">
+                                <p class="text-sm text-green-800"><i class="fa-solid fa-clock mr-2"></i><strong>Processing Time:</strong> Usually released on the same day or within 1-3 days depending on verification.</p>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-200">
+                                <a href="https://forms.gle/example-barangay-clearance-form" target="_blank" class="inline-flex items-center gap-2 bg-green-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                    File Barangay Clearance Form
+                                </a>
+                                <p class="text-xs text-slate-500 mt-2 ml-1">Submit your barangay clearance application online</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 3 -->
+                <div id="accordion-bldg" class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white hover:bg-slate-50 transition" onclick="toggleAccordion('bldg-content', this)">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-orange-100 p-2 rounded-full text-orange-600"><i class="fa-solid fa-building"></i></div>
+                            <span class="font-bold text-lg text-slate-800">Building & Fencing Permits</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="bldg-content" class="accordion-content bg-slate-50">
+                        <div class="p-6 border-t border-slate-200">
+                            <div class="mb-4">
+                                <h4 class="font-bold text-slate-700 mb-2">Requirements:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-slate-600 ml-2">
+                                    <li>Application Forms (Signed & Sealed by Engineer/Architect)</li>
+                                    <li>Locational Clearance</li>
+                                    <li>Photocopy of Title / Tax Declaration</li>
+                                    <li>Photocopy of Current Tax Receipt</li>
+                                    <li>Site Development Plan</li>
+                                    <li>Building Plans (Floor Plans, Elevations, Sections)</li>
+                                    <li>Structural Analysis & Design (for 2-storey and up)</li>
+                                </ul>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-200">
+                                <a href="https://forms.gle/example-building-permit-form" target="_blank" class="inline-flex items-center gap-2 bg-green-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                    File Building Permit Application
+                                </a>
+                                <p class="text-xs text-slate-500 mt-2 ml-1">Submit construction and renovation permit applications</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 4 -->
+                <div id="accordion-docs" class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none bg-white hover:bg-slate-50 transition" onclick="toggleAccordion('docs-content', this)">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-purple-100 p-2 rounded-full text-purple-600"><i class="fa-solid fa-file-lines"></i></div>
+                            <span class="font-bold text-lg text-slate-800">Local Civil Registry (Public Docs)</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    <div id="docs-content" class="accordion-content bg-slate-50">
+                        <div class="p-6 border-t border-slate-200">
+                            <div class="mb-4">
+                                <h4 class="font-bold text-slate-700 mb-2">Available Documents:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-slate-600 ml-2">
+                                    <li>Birth Certificate (Late Registration available)</li>
+                                    <li>Marriage Certificate</li>
+                                    <li>Death Certificate</li>
+                                    <li>CENOMAR (Certificate of No Marriage) - *Note: Usually processed via PSA online, but local registry can assist.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg border border-purple-100 mb-4">
+                                <p class="text-sm text-purple-800"><i class="fa-solid fa-user-check mr-2"></i><strong>Authorization:</strong> If requesting for someone else, bring an authorization letter and your ID.</p>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-slate-200">
+                                <a href="https://forms.gle/example-civil-registry-form" target="_blank" class="inline-flex items-center gap-2 bg-green-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-800 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                    Request Document Online
+                                </a>
+                                <p class="text-xs text-slate-500 mt-2 ml-1">Request birth, marriage, or death certificates electronically</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Steps -->
+    <section id="steps" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">General Filing Steps</h2>
+                <p class="text-slate-600">A simplified overview of the process for new business applications.</p>
+            </div>
+
+            <div class="relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-100 -translate-y-1/2 z-0"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center hover:shadow-md transition">
+                        <div class="w-16 h-16 bg-green-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg ring-4 ring-white">1</div>
+                        <h3 class="font-bold text-lg mb-2">Barangay Level</h3>
+                        <p class="text-sm text-slate-500">Secure Barangay Business Clearance and Barangay Clearance from your local Barangay Captain.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center hover:shadow-md transition">
+                        <div class="w-16 h-16 bg-green-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg ring-4 ring-white">2</div>
+                        <h3 class="font-bold text-lg mb-2">Zoning & Health</h3>
+                        <p class="text-sm text-slate-500">Obtain Locational Clearance (MPDC) and Health/Sanitary Permit (MHO).</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center hover:shadow-md transition">
+                        <div class="w-16 h-16 bg-green-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg ring-4 ring-white">3</div>
+                        <h3 class="font-bold text-lg mb-2">Fire & Safety</h3>
+                        <p class="text-sm text-slate-500">Secure Fire Safety Inspection Certificate (FSIC) from the Bureau of Fire Protection (BFP) station.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center hover:shadow-md transition">
+                        <div class="w-16 h-16 bg-green-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-lg ring-4 ring-white">4</div>
+                        <h3 class="font-bold text-lg mb-2">Mayor's Office</h3>
+                        <p class="text-sm textlate-500">Submit all clearances to the Business Permits & Licensing Office (BPLO) for the Mayor's Permit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Checklist -->
+    <section id="checklist" class="py-16 bg-slate-50">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                <div class="bg-green-700 p-6 text-white flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold">Business Permit Checklist</h2>
+                        <p class="text-green-100 text-sm">Track your document preparation progress.</p>
+                    </div>
+                    <button onclick="resetChecklist()" class="text-xs bg-green-800 hover:bg-green-900 px-3 py-1 rounded border border-green-700 transition">
+                        Reset
+                    </button>
+                </div>
+                
+                <div class="p-6 space-y-3" id="checklist-container">
+                    <!-- Items generated by JS or static -->
+                    <label class="flex items-center p-3 rounded-lg hover:bg-slate-50 cursor-pointer transition border border-transparent hover:border-slate-200">
+                        <input type="checkbox" class="checklist-item w-5 h-5 text-green-700 rounded focus:ring-green-700 border-gray-300">
+                        <span class="ml-3 text-slate-700">Barangay Business Clearance</span>
+                    </label>
+                    <label class="flex items-center p-3 rounded-lg hover:bg-slate-50 cursor-pointer transition border border-transparent hover:border-slate-200">
+                        <input type="checkbox" class="checklist-item w-5 h-5 text-green-700 rounded focus:ring-green-700 border-gray-300">
+                        <span class="ml-3 text-slate-700">DTI / SEC Registration</span>
+                    </label>
+                    <label class="flex items-center p-3 rounded-lg hover:bg-slate-50 cursor-pointer transition border border-transparent hover:border-slate-200">
+                        <input type="checkbox" class="checklist-item w-5 h-5 text-green-700 rounded focus:ring-green-700 border-gray-300">
+                        <span class="ml-3 text-slate-700">Locational Clearance (Zoning)</span>
+                    </label>
+                    <label class="flex items-center p-3 rounded-lg hover:bg-slate-50 cursor-pointer transition border border-transparent hover:border-slate-200">
+                        <input type="checkbox" class="checklist-item w-5 h-5 text-green-700 rounded focus:ring-green-700 border-gray-300">
+                        <span class="ml-3 text-slate-700">Sanitary Permit (Health Office)</span>
+                    </label>
+                    <label class="flex items-center p-3 rounded-lg hover:bg-slate-50 cursor-pointer transition border border-transparent hover:border-slate-200">
+                        <input type="checkbox" class="checklist-item w-5 h-5 text-green-700 rounded focus:ring-green-700 border-gray-300">
+                        <span class="ml-3 text-slate-700">Fire Safety Inspection Cert (BFP)</span>
+                    </label>
+                    <label class="flex items-center p-3 rounded-lg hover:bg-slate-50 cursor-pointer transition border border-transparent hover:border-slate-200">
+                        <input type="checkbox" class="checklist-item w-5 h-5 text-green-700 rounded focus:ring-green-700 border-gray-300">
+                        <span class="ml-3 text-slate-700">Contract of Lease / Land Title</span>
+                    </label>
+                </div>
+                
+                <div class="bg-slate-50 p-4 border-t border-slate-200 text-center">
+                    <p class="text-sm text-slate-500 italic">Note: This checklist is saved locally in your browser for this session.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Contact Information</h2>
+                    <p class="text-slate-600 mb-8">For specific inquiries regarding your application status or special cases, please contact the respective offices directly.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-green-100 p-3 rounded-lg text-green-700">
+                                <i class="fa-solid fa-building-columns text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Municipal Hall</h4>
+                                <p class="text-slate-600">Cantilan, Surigao del Sur</p>
+                                <p class="text-slate-500 text-sm mt-1">Open Monday - Friday, 8:00 AM - 5:00 PM</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="bg-green-100 p-3 rounded-lg text-green-600">
+                                <i class="fa-solid fa-phone text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Trunk Line</h4>
+                                <p class="text-slate-600">(086) XXX-XXXX</p>
+                                <p class="text-slate-500 text-sm mt-1">Call during office hours</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="bg-red-100 p-3 rounded-lg text-red-600">
+                                <i class="fa-solid fa-envelope text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Email</h4>
+                                <p class="text-slate-600">lgucantilan@example.gov.ph</p>
+                                <p class="text-slate-500 text-sm mt-1">Response within 2-3 business days</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Placeholder -->
+                <div class="bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 h-80 lg:h-auto relative group">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.1234567890123!2d125.12345678901234!3d9.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDcnMjQuNCJOIDEyNcKwMDcnMjQuNCJF!5e0!3m2!1sen!2sph!4v1234567890123!5m2!1sen!2sph" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="absolute inset-0 grayscale group-hover:grayscale-0 transition duration-500">
+                    </iframe>
+                    <div class="absolute bottom-4 right-4 bg-white px-4 py-2 rounded-lg shadow-lg text-xs font-bold text-slate-500">
+                        Cantilan Municipal Hall
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs">
-            <p>&copy; 2023 Municipality of Cantilan. Secure Online Forms.</p>
+    <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4 text-white">
+                        <img src="image.png" alt="Municipality of Cantilan Official Seal" class="h-10 w-10 object-contain rounded-full border border-slate-600">
+                        <span class="font-bold text-lg">Cantilan Guide</span>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        An informational portal dedicated to simplifying public transactions for the citizens and entrepreneurs of Cantilan, Surigao del Sur.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms of Use</a></li>
+                        <li><a href="#" class="hover:text-white transition">Downloadable Forms</a></li>
+                        <li><a href="#" class="hover:text-white transition">Transparency Seal</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Emergency Hotlines</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-truck-medical text-red-500"></i> MDRRMO: 911</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-fire text-orange-500"></i> BFP: 911</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-handcuffs text-blue-500"></i> PNP: 911</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+                <p>&copy; 2023 Municipality of Cantilan. All rights reserved.</p>
+                <p class="mt-2 md:mt-0">Not an official government site. For demo purposes only.</p>
+            </div>
         </div>
     </footer>
 
-    <!-- Application Logic -->
+    <!-- JavaScript Logic -->
     <script>
-        /**
-         * Cantilan Online Forms Application
-         * Handles routing, form generation, local storage, and PDF generation.
-         */
-        const app = {
-            container: document.getElementById('app-container'),
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Accordion Logic
+        function toggleAccordion(contentId, btn) {
+            const content = document.getElementById(contentId);
+            const icon = btn.querySelector('.fa-chevron-down');
             
-            // Data Models for Forms
-            forms: {
-                'business': {
-                    title: "Mayor's Permit Application",
-                    description: "For new businesses or annual renewals.",
-                    fields: [
-                        { id: 'date', label: 'Date of Application', type: 'date', required: true },
-                        { id: 'business_name', label: 'Business Name / Trade Name', type: 'text', required: true, placeholder: "e.g. Cantilan Fresh Seafood" },
-                        { id: 'business_address', label: 'Business Address', type: 'textarea', required: true, placeholder: "Street, Barangay, Cantilan, Surigao del Sur" },
-                        { id: 'business_type', label: 'Type of Business', type: 'select', options: ['Single Proprietorship', 'Partnership', 'Corporation', 'Cooperative'], required: true },
-                        { id: 'owner_name', label: 'Name of Owner / President', type: 'text', required: true, placeholder: "Surname, First Name, M.I." },
-                        { id: 'owner_address', label: 'Residence Address', type: 'text', required: true },
-                        { id: 'contact', label: 'Contact Number', type: 'tel', required: true },
-                        { id: 'capital', label: 'Estimated Capital Investment (PHP)', type: 'number', required: true },
-                        { id: 'dti_sec', label: 'DTI/SEC Registration No.', type: 'text', required: false },
-                        { id: 'tin', label: 'Tax Identification Number (TIN)', type: 'text', required: true },
-                        { id: 'employees', label: 'No. of Employees', type: 'number', required: true },
-                        { id: 'area', label: 'Total Floor Area (sqm)', type: 'number', required: true },
-                    ]
-                },
-                'barangay': {
-                    title: "Barangay Clearance",
-                    description: "Certificate of Residency and Good Moral Character.",
-                    fields: [
-                        { id: 'date', label: 'Date', type: 'date', required: true },
-                        { id: 'fullname', label: 'Full Name', type: 'text', required: true, placeholder: "First Middle Last" },
-                        { id: 'age', label: 'Age', type: 'number', required: true },
-                        { id: 'civil_status', label: 'Civil Status', type: 'select', options: ['Single', 'Married', 'Widowed', 'Separated'], required: true },
-                        { id: 'purok', label: 'Purok/Zone', type: 'text', required: true },
-                        { id: 'barangay_sel', label: 'Barangay', type: 'select', options: ['Poblacion', 'Magosilom', 'San Pedro', 'Consuelo', 'General Island'], required: true },
-                        { id: 'period', label: 'Period of Residency', type: 'text', required: true, placeholder: "e.g. 5 Years" },
-                        { id: 'purpose', label: 'Purpose', type: 'select', options: ['Employment', 'Bank Requirement', 'Police Clearance', 'School Requirement', 'Business Permit'], required: true },
-                        { id: 'id_presented', label: 'ID Presented', type: 'text', required: true, placeholder: "Voters ID / Passport / License" },
-                        { id: 'id_no', label: 'ID Number', type: 'text', required: true }
-                    ]
-                },
-                'building': {
-                    title: "Building Permit Application",
-                    description: "Application for construction of new buildings or renovation.",
-                    fields: [
-                        { id: 'date', label: 'Date', type: 'date', required: true },
-                        { id: 'owner_name', label: 'Applicant/Owner Name', type: 'text', required: true },
-                        { id: 'owner_address', label: 'Mailing Address', type: 'text', required: true },
-                        { id: 'project_loc', label: 'Project Location', type: 'text', required: true },
-                        { id: 'scope', label: 'Scope of Work', type: 'select', options: ['New Construction', 'Renovation', 'Erection', 'Addition', 'Repair', 'Demolition'], required: true },
-                        { id: 'use', label: 'Use or Character of Occupancy', type: 'select', options: ['Residential', 'Commercial', 'Industrial', 'Institutional', 'Agricultural'], required: true },
-                        { id: 'engineer', label: 'Design Professional (Engineer/Architect)', type: 'text', required: true },
-                        { id: 'engineer_address', label: 'Professional Address', type: 'text', required: true },
-                        { id: 'prc', label: 'PRC No.', type: 'text', required: true },
-                        { id: 'ptr', label: 'PTR No.', type: 'text', required: true },
-                        { id: 'tin', label: 'TIN', type: 'text', required: true }
-                    ]
-                }
-            },
+            // Close others (optional, keeping it open allows comparison)
+            // document.querySelectorAll('.accordion-content').forEach(el => {
+            //     if(el.id !== contentId) el.classList.remove('active');
+            // });
 
-            // Initialize App
-            init() {
-                this.goHome();
-            },
-
-            // Render Home/Dashboard
-            goHome() {
-                this.container.innerHTML = `
-                    <div class="text-center mb-12 animate-fade-in">
-                        <h2 class="text-3xl font-bold text-slate-900 mb-4">Select a Permit to Fill Out</h2>
-                        <p class="text-slate-600 max-w-2xl mx-auto">Choose the document you need. You can save your progress and download the completed form as a PDF instantly.</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        ${this.renderCard('business', 'fa-briefcase', 'Business Permit', "Mayor's Permit & Business License", 'bg-blue-50 text-blue-600')}
-                        ${this.renderCard('barangay', 'fa-house-chimney', 'Barangay Clearance', "Residency & Good Standing", 'bg-green-50 text-green-600')}
-                        ${this.renderCard('building', 'fa-trowel-bricks', 'Building Permit', "Construction & Renovation", 'bg-orange-50 text-orange-600')}
-                    </div>
-                `;
-            },
-
-            // Helper to render dashboard cards
-            renderCard(key, icon, title, desc, colorClass) {
-                return `
-                    <div onclick="app.loadForm('${key}')" class="group bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-gov-blue transition-all cursor-pointer transform hover:-translate-y-1">
-                        <div class="w-16 h-16 ${colorClass} rounded-full flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">
-                            <i class="fa-solid ${icon}"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2">${title}</h3>
-                        <p class="text-slate-500 mb-6">${desc}</p>
-                        <span class="text-gov-blue font-semibold flex items-center gap-2">
-                            Fill Out Form <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                        </span>
-                    </div>
-                `;
-            },
-
-            // Load Specific Form
-            loadForm(formKey) {
-                const formData = this.forms[formKey];
-                const savedData = JSON.parse(localStorage.getItem(`form_${formKey}`) || '{}');
-
-                let formHtml = `
-                    <div class="max-w-3xl mx-auto">
-                        <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden mb-8">
-                            <div class="bg-gov-blue p-6 text-white flex justify-between items-start">
-                                <div>
-                                    <h2 class="text-2xl font-bold">${formData.title}</h2>
-                                    <p class="text-blue-100 text-sm mt-1">${formData.description}</p>
-                                </div>
-                                <div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-                                    <i class="fa-solid fa-pen-to-square text-xl"></i>
-                                </div>
-                            </div>
-                            
-                            <form id="active-form" onsubmit="event.preventDefault();" class="p-8 space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    ${formData.fields.map(field => this.renderField(field, savedData[field.id])).join('')}
-                                </div>
-                                
-                                <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-4 justify-end">
-                                    <button type="button" onclick="app.saveForm('${formKey}')" class="px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-lg hover:bg-slate-200 transition flex items-center justify-center gap-2">
-                                        <i class="fa-solid fa-floppy-disk"></i> Save Progress
-                                    </button>
-                                    <button type="button" onclick="app.downloadPDF('${formKey}')" class="px-6 py-3 bg-gov-blue text-white font-bold rounded-lg hover:bg-blue-800 transition shadow-lg flex items-center justify-center gap-2">
-                                        <i class="fa-solid fa-file-pdf"></i> Download PDF
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                        <div id="save-status" class="text-center text-sm font-medium h-6 transition-opacity opacity-0 text-green-600">
-                            <i class="fa-solid fa-check-circle"></i> Progress Saved Successfully
-                        </div>
-                    </div>
-                `;
-                
-                this.container.innerHTML = formHtml;
-                window.scrollTo(0,0);
-            },
-
-            // Render individual input fields
-            renderField(field, savedValue) {
-                const value = savedValue || '';
-                const isTextarea = field.type === 'textarea';
-                const isSelect = field.type === 'select';
-                
-                const baseClass = "w-full px-4 py-2 rounded-lg form-input bg-slate-50 focus:bg-white";
-                
-                let inputHtml = '';
-                
-                if (isTextarea) {
-                    inputHtml = `<textarea id="${field.id}" name="${field.id}" rows="3" class="${baseClass}" placeholder="${field.placeholder || ''}">${value}</textarea>`;
-                } else if (isSelect) {
-                    inputHtml = `
-                        <select id="${field.id}" name="${field.id}" class="${baseClass}">
-                            <option value="" disabled ${!value ? 'selected' : ''}>Select...</option>
-                            ${field.options.map(opt => `<option value="${opt}" ${value === opt ? 'selected' : ''}>${opt}</option>`).join('')}
-                        </select>
-                    `;
-                } else {
-                    inputHtml = `<input type="${field.type}" id="${field.id}" name="${field.id}" value="${value}" class="${baseClass}" placeholder="${field.placeholder || ''}">`;
-                }
-
-                return `
-                    <div class="${field.type === 'textarea' ? 'md:col-span-2' : ''}">
-                        <label for="${field.id}" class="block text-sm font-semibold text-slate-700 mb-1">
-                            ${field.label} ${field.required ? '<span class="text-red-500">*</span>' : ''}
-                        </label>
-                        ${inputHtml}
-                    </div>
-                `;
-            },
-
-            // Save to LocalStorage
-            saveForm(formKey) {
-                const form = document.getElementById('active-form');
-                const formData = new FormData(form);
-                const data = {};
-                formData.forEach((value, key) => data[key] = value);
-                
-                localStorage.setItem(`form_${formKey}`, JSON.stringify(data));
-                
-                // Show success message
-                const status = document.getElementById('save-status');
-                status.classList.remove('opacity-0');
-                setTimeout(() => status.classList.add('opacity-0'), 3000);
-            },
-
-            // Generate and Download PDF
-            downloadPDF(formKey) {
-                // 1. Save first
-                this.saveForm(formKey);
-
-                // 2. Get Data
-                const data = JSON.parse(localStorage.getItem(`form_${formKey}`) || '{}');
-                const formConfig = this.forms[formKey];
-
-                // 3. Create Hidden PDF Container
-                const pdfId = 'pdf-content-' + Date.now();
-                const pdfContainer = document.createElement('div');
-                pdfContainer.id = pdfId;
-                pdfContainer.style.position = 'absolute';
-                pdfContainer.style.left = '-9999px';
-                document.body.appendChild(pdfContainer);
-
-                // 4. Build PDF HTML Content
-                pdfContainer.innerHTML = this.buildPDFTemplate(formConfig, data);
-
-                // 5. Generate PDF
-                const element = document.getElementById(pdfId);
-                const opt = {
-                    margin:       0.5,
-                    filename:     `Cantilan_${formKey}_${data.owner_name || data.fullname || 'Application'}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-
-                // Show loading state on button
-                const btn = document.querySelector('button[onclick^="app.downloadPDF"]');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<div class="loader border-white border-t-transparent w-5 h-5 mr-2"></div> Generating...';
-                btn.disabled = true;
-
-                html2pdf().set(opt).from(element).save().then(() => {
-                    // Cleanup
-                    document.body.removeChild(element);
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                });
-            },
-
-            // Build the actual PDF layout HTML
-            buildPDFTemplate(config, data) {
-                // Helper to safely get value
-                const get = (id) => data[id] || '_________________';
-
-                // Common Header
-                const header = `
-                    <div class="pdf-header">
-                        <h1 style="font-size: 24px; margin:0; text-transform: uppercase;">Republic of the Philippines</h1>
-                        <h2 style="font-size: 20px; margin:5px 0;">MUNICIPALITY OF CANTILAN</h2>
-                        <h3 style="font-size: 18px; margin:5px 0; font-weight: normal;">Province of Surigao del Sur</h3>
-                        <div style="border-top: 2px solid black; margin-top: 10px; padding-top: 10px;">
-                            <h2 style="font-size: 22px; margin:0; font-weight: bold;">${config.title.toUpperCase()}</h2>
-                        </div>
-                    </div>
-                `;
-
-                // Dynamic Content based on form type
-                let bodyContent = '';
-
-                if (config.title.includes("Business")) {
-                    bodyContent = `
-                        <div style="margin-bottom: 20px;">
-                            <strong>Date:</strong> <span class="pdf-field">${get('date')}</span>
-                        </div>
-                        <h3 style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">BUSINESS INFORMATION</h3>
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                            <tr>
-                                <td style="padding: 8px; width: 40%;"><strong>Business Name:</strong></td>
-                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('business_name')}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px;"><strong>Address:</strong></td>
-                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('business_address')}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px;"><strong>Type:</strong></td>
-                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('business_type')}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px;"><strong>TIN:</strong></td>
-                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('tin')}</td>
-                            </tr>
-                        </table>
-
-                        <h3 style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">OWNER INFORMATION</h3>
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                            <tr>
-                                <td style="padding: 8px; width: 40%;"><strong>Name:</strong></td>
-                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('owner_name')}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px;"><strong>Residence:</strong></td>
-                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('owner_address')}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px;"><strong>Contact:</strong></td>
-                                <td style="padding: 8px; border-bottom: 1px solid #333;">${get('contact')}</td>
-                            </tr>
-                        </table>
-                        
-                        <div style="margin-top: 40px; border: 1px solid #000; padding: 15px;">
-                            <p style="margin:0; font-size: 12px;">
-                                <strong>OFFICIAL USE ONLY:</strong><br>
-                                Amount Paid: _____________ O.R. No: _____________ Date: _____________<br>
-                                <br>
-                                Processed by: _______________________
-                            </p>
-                        </div>
-                    `;
-                } else if (config.title.includes("Barangay")) {
-                    bodyContent = `
-                         <div style="text-align: right; margin-bottom: 20px;">
-                            <strong>Date:</strong> <span class="pdf-field">${get('date')}</span>
-                        </div>
-                        <div style="text-align: center; margin-bottom: 30px;">
-                            <h2 style="text-decoration: underline; font-size: 20px;">BARANGAY CLEARANCE</h2>
-                        </div>
-                        
-                        <p style="line-height: 1.8; text-align: justify; margin-bottom: 20px;">
-                            TO WHOM IT MAY CONCERN:
-                        </p>
-                        <p style="line-height: 1.8; text-align: justify; text-indent: 50px; margin-bottom: 20px;">
-                            This is to certify that <strong>${get('fullname')}</strong>, <strong>${get('age')}</strong> years old, 
-                            <strong>${get('civil_status')}</strong>, is a bona fide resident of Purok <strong>${get('purok')}</strong>, 
-                            Barangay <strong>${get('barangay_sel')}</strong>, Cantilan, Surigao del Sur for 
-                            <strong>${get('period')}</strong>.
-                        </p>
-                        <p style="line-height: 1.8; text-align: justify; text-indent: 50px; margin-bottom: 20px;">
-                            Further certifies that the above-named person is of good moral character, law-abiding citizen, 
-                            and has no derogatory record filed against him/her in this office.
-                        </p>
-                        <p style="line-height: 1.8; text-align: justify; text-indent: 50px; margin-bottom: 40px;">
-                            This clearance is being issued upon the request of the above-named person for 
-                            <strong>${get('purpose')}</strong> purposes.
-                        </p>
-
-                        <div style="width: 50%; margin-left: auto; text-align: center; margin-top: 60px;">
-                            <p style="border-bottom: 1px solid #000; margin-bottom: 5px;">&nbsp;</p>
-                            <p style="margin:0; font-weight: bold;">PUNONG BARANGAY</p>
-                            <p style="margin:0; font-size: 12px;">Barangay ${get('barangay_sel')}</p>
-                        </div>
-
-                        <div style="margin-top: 60px; font-size: 11px; border-top: 1px solid #ccc; padding-top: 10px;">
-                            <p>ID Presented: ${get('id_presented')} | ID No: ${get('id_no')}</p>
-                        </div>
-                    `;
-                } else if (config.title.includes("Building")) {
-                    bodyContent = `
-                        <div style="margin-bottom: 20px;">
-                            <strong>Date:</strong> <span class="pdf-field">${get('date')}</span>
-                        </div>
-                        <h3 style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">BOX 1 (TO BE ACCOMPLISHED BY THE OWNER/APPLICANT)</h3>
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #999;"><strong>OWNER/APPLICANT</strong><br>${get('owner_name')}</td>
-                                <td style="padding: 8px; border: 1px solid #999;"><strong>FORM OF OWNERSHIP</strong><br>Single</td>
-                                <td style="padding: 8px; border: 1px solid #999;"><strong>USE OR CHARACTER OF OCCUPANCY</strong><br>${get('use')}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="padding: 8px; border: 1px solid #999;">
-                                    <strong>ADDRESS:</strong> ${get('owner_address')}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="padding: 8px; border: 1px solid #999;">
-                                    <strong>LOCATION OF CONSTRUCTION:</strong> ${get('project_loc')}
-                                </td>
-                            </tr>
-                             <tr>
-                                <td colspan="3" style="padding: 8px; border: 1px solid #999;">
-                                    <strong>SCOPE OF WORK:</strong> ${get('scope')}
-                                </td>
-                            </tr>
-                        </table>
-
-                        <h3 style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">BOX 2 (DESIGN PROFESSIONAL)</h3>
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #999;"><strong>NAME:</strong><br>${get('engineer')}</td>
-                                <td style="padding: 8px; border: 1px solid #999;"><strong>ADDRESS:</strong><br>${get('engineer_address')}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #999;"><strong>PRC NO:</strong> ${get('prc')}</td>
-                                <td style="padding: 8px; border: 1px solid #999;"><strong>PTR NO:</strong> ${get('ptr')}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" style="padding: 8px; border: 1px solid #999;"><strong>TIN:</strong> ${get('tin')}</td>
-                            </tr>
-                        </table>
-                        
-                        <div style="margin-top: 40px;">
-                             <p style="font-size: 10px; text-align: justify;">
-                                <strong>IMPORTANT:</strong> This application is hereby made in accordance with the National Building Code of the Philippines (PD 1096) and its Implementing Rules and Regulations.
-                             </p>
-                        </div>
-                    `;
-                }
-
-                return `<div class="pdf-page">${header}${bodyContent}</div>`;
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
             }
-        };
+        }
 
-        // Start App
+        // Smooth Scroll Helper
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                // Open the accordion automatically when clicked from grid
+                const content = element.querySelector('.accordion-content');
+                const btn = element.querySelector('button');
+                if (!content.classList.contains('active')) {
+                    toggleAccordion(content.id, btn);
+                }
+                
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Checklist Logic
+        function resetChecklist() {
+            const checkboxes = document.querySelectorAll('.checklist-item');
+            checkboxes.forEach(cb => cb.checked = false);
+        }
+
+        // Initialize: Open first accordion by default
         document.addEventListener('DOMContentLoaded', () => {
-            app.init();
+            const firstAccordionBtn = document.querySelector('#accordion-business button');
+            if(firstAccordionBtn) toggleAccordion('business-content', firstAccordionBtn);
         });
     </script>
 </body>
