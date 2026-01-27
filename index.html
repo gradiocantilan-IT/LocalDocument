@@ -254,10 +254,17 @@
             </h2>
         </div>
         
-        <div class="overflow-hidden mb-8">
+        <div class="overflow-hidden mb-2">
             <h1 class="serif-font text-4xl md:text-6xl lg:text-7xl font-bold text-white drop-shadow-2xl opacity-0 translate-y-20" id="title">
                 Cantilan
             </h1>
+        </div>
+
+        <!-- Business Express Text -->
+        <div class="overflow-hidden mb-8">
+            <p class="text-emerald-200 text-lg md:text-2xl font-semibold tracking-widest uppercase opacity-0 translate-y-10" id="business-express">
+                Business Express
+            </p>
         </div>
 
         <div class="overflow-hidden mb-8 max-w-lg mx-auto">
@@ -379,7 +386,7 @@
             const tl = gsap.timeline();
             tl.to("#subtitle", { y: 0, opacity: 1, duration: 1, ease: "power3.out" })
               .to("#title", { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.6")
-              .to("#mayor-section", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
+              .to("#business-express", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
               .to("#tagline", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.6")
               .to("#enter-btn", { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }, "-=0.4");
         });
@@ -534,4 +541,3 @@
     </script>
 </body>
 </html>
-
