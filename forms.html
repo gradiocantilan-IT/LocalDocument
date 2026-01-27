@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Municipality of Cantilan - Online Permit Filing System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap');
+        
+        :root {
+            --primary: #1e40af;
+            --secondary: #059669;
+            --accent: #d97706;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        
+        .serif {
+            font-family: 'Merriweather', serif;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-step {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        
+        .checkbox-card {
+            transition: all 0.2s;
+        }
+        
+        .checkbox-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .checkbox-card.selected {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+        }
+        
+        .permit-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .permit-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .official-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .official-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .input-field {
+            transition: all 0.2s;
+        }
+        
+        .input-field:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        
+        .document-preview {
+            border: 2px dashed #cbd5e1;
+            transition: all 0.2s;
+        }
+        
+        .document-preview:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+        
+        .document-preview.has-file {
+            border-color: #059669;
+            background-color: #f0fdf4;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; }
+            .glass-panel { box-shadow: none; border: 1px solid #ccc; }
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800">
+
+    <!-- Navigation -->
+    <nav class="official-header text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showDashboard()">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-lg">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Municipality of Cantilan</h1>
+                    <p class="text-xs text-blue-200">Province of Surigao del Sur</p>
+                </div>
+            </div>
+            
+            <!-- Auth Section -->
+            <div id="authSection" class="flex items-center space-x-4">
+                <!-- Logged Out State -->
+                <div id="loggedOutNav" class="flex items-center space-x-4">
+                    <button onclick="showLoginModal()" class="hidden md:block hover:text-blue-200 transition text-sm font-medium">
+                        Track Application
+                    </button>
+                    <button onclick="showLoginModal()" class="bg-white text-blue-900 px-5 py-2 rounded-lg font-semibold hover:bg-blue-50 transition shadow-lg flex items-center">
+                        <i class="fas fa-user-lock mr-2"></i>Login
+                    </button>
+                </div>
+
+                <!-- Logged In State -->
+                <div id="loggedInNav" class="hidden items-center space-x-4">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-semibold" id="userNameDisplay">Juan Dela Cruz</p>
+                        <p class="text-xs text-blue-200" id="userEmailDisplay">juan@email.com</p>
+                    </div>
+                    <div class="relative group">
+                        <button class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold hover:bg-gray-100 transition">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <!-- Dropdown -->
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 hidden group-hover:block text-gray-800 border border-gray-100">
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-50 text-sm">
+                                <i class="fas fa-user-circle mr-2 text-gray-400"></i>My Profile
+                            </a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-50 text-sm">
+                                <i class="fas fa-file-alt mr-2 text-gray-400"></i>My Applications
+                            </a>
+                            <div class="border-t border-gray-100 my-1"></div>
+                            <a href="#" onclick="logout()" class="block px-4 py-2 hover:bg-red-50 text-sm text-red-600">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-2xl" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden bg-blue-800 text-white p-4 md:hidden">
+        <div id="mobileLoggedOut">
+            <a href="#" class="block py-2 border-b border-blue-700" onclick="showDashboard()">Home</a>
+            <a href="#" class="block py-2 border-b border-blue-700" onclick="showLoginModal()">Track Application</a>
+            <a href="#" class="block py-2 bg-blue-700 mt-2 rounded text-center" onclick="showLoginModal()">Login</a>
+        </div>
+        <div id="mobileLoggedIn" class="hidden">
+            <div class="px-2 py-3 border-b border-blue-700 mb-2">
+                <p class="font-semibold" id="mobileUserName">User</p>
+                <p class="text-xs text-blue-200" id="mobileUserEmail">email</p>
+            </div>
+            <a href="#" class="block py-2 border-b border-blue-700">My Applications</a>
+            <a href="#" class="block py-2 border-b border-blue-700">Profile</a>
+            <a href="#" class="block py-2 text-red-300" onclick="logout()">Logout</a>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-95 opacity-0" id="loginModalContent">
+            <div class="login-container p-6 text-white text-center">
+                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-user-lock text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold">Welcome Back</h2>
+                <p class="text-blue-100 text-sm mt-1">Login to access permit applications</p>
+            </div>
+            
+            <div class="p-6 space-y-4">
+                <!-- Login Error Message -->
+                <div id="loginError" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm flex items-center">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <span>Invalid email or password. Please try again.</span>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2.5 text-gray-400">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input type="email" id="loginEmail" required 
+                                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                    placeholder="you@example.com" value="demo@cantilan.gov.ph">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2.5 text-gray-400">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" id="loginPassword" required 
+                                    class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                    placeholder="••••••••" value="password123">
+                                <button type="button" onclick="togglePassword()" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-sm">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                <span class="ml-2 text-gray-600">Remember me</span>
+                            </label>
+                            <a href="#" class="text-blue-600 hover:underline">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" id="loginBtn" 
+                            class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition shadow-lg flex items-center justify-center space-x-2">
+                            <span>Login</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="relative py-2">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">New applicant?</span>
+                    </div>
+                </div>
+
+                <button onclick="showRegisterModal()" 
+                    class="w-full border-2 border-gray-300 text-gray-700 py-2.5 rounded-lg font-semibold hover:border-blue-500 hover:text-blue-600 transition">
+                    Create Account
+                </button>
+
+                <button onclick="closeLoginModal()" 
+                    class="w-full text-gray-500 text-sm hover:text-gray-700 py-2">
+                    Cancel and Return to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg my-8 transform transition-all scale-95 opacity-0" id="registerModalContent">
+            <div class="bg-gradient-to-r from-green-600 to-teal-600 p-6 text-white text-center">
+                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-user-plus text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold">Create Account</h2>
+                <p class="text-green-100 text-sm mt-1">Register to file permits online</p>
+            </div>
+            
+            <div class="p-6 space-y-4">
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                            <input type="text" id="regFirstName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                            <input type="text" id="regLastName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                        <input type="email" id="regEmail" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
+                        <input type="tel" id="regMobile" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="09XX XXX XXXX">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Address *</label>
+                        <input type="text" id="regAddress" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Barangay, Cantilan, Surigao del Sur">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+                            <input type="password" id="regPassword" required minlength="8" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label>
+                            <input type="password" id="regConfirmPassword" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-2 pt-2">
+                        <input type="checkbox" id="agreeTerms" required class="mt-1 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        <label for="agreeTerms" class="text-xs text-gray-600">
+                            I agree to the <a href="#" class="text-green-600 hover:underline">Terms of Service</a> and 
+                            <a href="#" class="text-green-600 hover:underline">Privacy Policy</a>. I consent to the processing of my personal data in accordance with the Data Privacy Act of 2012.
+                        </label>
+                    </div>
+
+                    <button type="submit" id="registerBtn" class="w-full bg-green-600 text-white py-2.5 rounded-lg font-semibold hover:bg-green-700 transition shadow-lg mt-4">
+                        Create Account
+                    </button>
+                </form>
+
+                <div class="text-center text-sm text-gray-600">
+                    Already have an account? 
+                    <a href="#" onclick="switchToLogin()" class="text-green-600 font-semibold hover:underline">Login here</a>
+                </div>
+
+                <button onclick="closeRegisterModal()" class="w-full text-gray-500 text-sm hover:text-gray-700 py-2">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        
+        <!-- Dashboard / Permit Selection -->
+        <div id="dashboard" class="space-y-8">
+            <!-- Hero Section -->
+            <div class="text-center space-y-4 mb-12">
+                <div class="inline-block px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold mb-2">
+                    <i class="fas fa-shield-alt mr-2"></i>Secured Online Filing
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 serif">
+                    Online Permit Filing System
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Securely apply for business permits, zoning certifications, and locational clearances 
+                    from the Municipal Planning and Development Office of Cantilan.
+                </p>
+                <div class="flex justify-center gap-4 text-sm text-gray-500 mt-4">
+                    <span class="flex items-center"><i class="fas fa-shield-alt text-green-500 mr-2"></i>Data Privacy Act Compliant</span>
+                    <span class="flex items-center"><i class="fas fa-clock text-blue-500 mr-2"></i>24/7 Access</span>
+                    <span class="flex items-center"><i class="fas fa-mobile-alt text-purple-500 mr-2"></i>Mobile Friendly</span>
+                </div>
+            </div>
+
+            <!-- Authentication Notice Banner -->
+            <div id="authNotice" class="hidden bg-gradient-to-r from-amber-50 to-orange-50 border border-orange-200 rounded-xl p-4 mb-8 shadow-sm">
+                <div class="flex items-start space-x-3">
+                    <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-lock text-orange-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-orange-900 mb-1">Authentication Required</h3>
+                        <p class="text-sm text-orange-800 mb-3">
+                            To ensure secure processing of your permit application and protect your personal data, 
+                            you need to login or create an account before proceeding.
+                        </p>
+                        <div class="flex space-x-3">
+                            <button onclick="showLoginModal()" class="px-4 py-2 bg-orange-600 text-white rounded-lg text-sm font-medium hover:bg-orange-700 transition">
+                                Login to Continue
+                            </button>
+                            <button onclick="showRegisterModal()" class="px-4 py-2 border border-orange-300 text-orange-700 rounded-lg text-sm font-medium hover:bg-orange-100 transition">
+                                Register New Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Permit Type Cards -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Business Permit -->
+                <div class="permit-card rounded-2xl p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full -mr-16 -mt-16 opacity-50 transition-transform group-hover:scale-150"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 text-2xl mb-4">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Unified Business Permit</h3>
+                        <p class="text-gray-600 text-sm mb-4">New application, renewal, or additional permits for business operations.</p>
+                        <ul class="text-sm text-gray-500 space-y-1 mb-4">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Mayor's Permit</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Sanitary Permit</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Fire Safety</li>
+                        </ul>
+                        <button onclick="selectPermit('business')" class="w-full py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition shadow-md flex items-center justify-center group-hover:shadow-lg">
+                            <span>Apply Now</span>
+                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Zoning Certification -->
+                <div class="permit-card rounded-2xl p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-green-100 rounded-full -mr-16 -mt-16 opacity-50 transition-transform group-hover:scale-150"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 text-2xl mb-4">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Zoning Certification</h3>
+                        <p class="text-gray-600 text-sm mb-4">Verify land use compliance and zoning classification for your property.</p>
+                        <ul class="text-sm text-gray-500 space-y-1 mb-4">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Land Use Verification</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Vicinity Map Review</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Property Rights Check</li>
+                        </ul>
+                        <button onclick="selectPermit('zoning')" class="w-full py-2.5 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition shadow-md flex items-center justify-center group-hover:shadow-lg">
+                            <span>Apply Now</span>
+                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Locational Clearance -->
+                <div class="permit-card rounded-2xl p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-100 rounded-full -mr-16 -mt-16 opacity-50 transition-transform group-hover:scale-150"></div>
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 text-2xl mb-4">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Locational Clearance</h3>
+                        <p class="text-gray-600 text-sm mb-4">HLURB-compliant clearance for new developments and construction projects.</p>
+                        <ul class="text-sm text-gray-500 space-y-1 mb-4">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Project Evaluation</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Development Approval</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Environmental Check</li>
+                        </ul>
+                        <button onclick="selectPermit('locational')" class="w-full py-2.5 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition shadow-md flex items-center justify-center group-hover:shadow-lg">
+                            <span>Apply Now</span>
+                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works -->
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold text-center mb-8 text-gray-900">How to Apply</h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="text-center space-y-3">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto">
+                            <span class="font-bold">1</span>
+                        </div>
+                        <h4 class="font-semibold">Login/Register</h4>
+                        <p class="text-sm text-gray-600">Create an account or login to secure your application</p>
+                    </div>
+                    <div class="text-center space-y-3">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto">
+                            <span class="font-bold">2</span>
+                        </div>
+                        <h4 class="font-semibold">Select Permit</h4>
+                        <p class="text-sm text-gray-600">Choose the type of permit you need to apply for</p>
+                    </div>
+                    <div class="text-center space-y-3">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto">
+                            <span class="font-bold">3</span>
+                        </div>
+                        <h4 class="font-semibold">Fill Up & Upload</h4>
+                        <p class="text-sm text-gray-600">Complete the form and attach required documents</p>
+                    </div>
+                    <div class="text-center space-y-3">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto">
+                            <span class="font-bold">4</span>
+                        </div>
+                        <h4 class="font-semibold">Track Status</h4>
+                        <p class="text-sm text-gray-600">Monitor your application status online</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Applications -->
+            <div class="glass-panel rounded-2xl p-6 mt-12">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold flex items-center">
+                        <i class="fas fa-history text-blue-600 mr-2"></i>
+                        Recent Applications
+                    </h3>
+                    <button onclick="showLoginModal()" id="viewAllBtn" class="text-sm text-blue-600 hover:underline">Login to view all</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 text-gray-600">
+                            <tr>
+                                <th class="px-4 py-3 text-left">Reference No.</th>
+                                <th class="px-4 py-3 text-left">Permit Type</th>
+                                <th class="px-4 py-3 text-left">Date Filed</th>
+                                <th class="px-4 py-3 text-left">Status</th>
+                                <th class="px-4 py-3 text-left">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100" id="recentApplications">
+                            <tr>
+                                <td colspan="5" class="px-4 py-8 text-center text-gray-400">
+                                    <i class="fas fa-lock mb-2 text-2xl"></i>
+                                    <p>Please login to view your applications</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Application Forms Container -->
+        <div id="applicationForm" class="hidden space-y-6">
+            <!-- Progress Header -->
+            <div class="flex items-center justify-between mb-6 no-print">
+                <button onclick="showDashboard()" class="text-gray-600 hover:text-gray-900 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+                </button>
+                <div class="text-sm text-gray-500">
+                    Application ID: <span class="font-mono font-bold text-gray-900" id="appIdDisplay">-</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="glass-panel rounded-2xl p-6 no-print">
+                <div class="flex justify-between mb-2 text-sm font-medium">
+                    <span id="progressLabel">Step 1 of 4</span>
+                    <span id="progressPercent">25%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progressBar" class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 25%"></div>
+                </div>
+                <div class="flex justify-between mt-4 text-xs text-gray-500">
+                    <div class="text-center flex-1" id="stepIndicator1">
+                        <div class="w-8 h-8 mx-auto rounded-full bg-blue-600 text-white flex items-center justify-center mb-1">1</div>
+                        <span>Classification</span>
+                    </div>
+                    <div class="text-center flex-1" id="stepIndicator2">
+                        <div class="w-8 h-8 mx-auto rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mb-1">2</div>
+                        <span>Information</span>
+                    </div>
+                    <div class="text-center flex-1" id="stepIndicator3">
+                        <div class="w-8 h-8 mx-auto rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mb-1">3</div>
+                        <span>Documents</span>
+                    </div>
+                    <div class="text-center flex-1" id="stepIndicator4">
+                        <div class="w-8 h-8 mx-auto rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mb-1">4</div>
+                        <span>Review</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Form Content -->
+            <div id="formContainer" class="glass-panel rounded-2xl p-6 md:p-8 shadow-xl">
+                <!-- Forms will be injected here by JavaScript -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between no-print">
+                <button id="prevBtn" onclick="prevStep()" class="hidden px-6 py-3 border-2 border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition">
+                    Previous
+                </button>
+                <button id="nextBtn" onclick="nextStep()" class="ml-auto px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition flex items-center">
+                    <span>Next Step</span>
+                    <i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Success/Confirmation Modal -->
+        <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-8 text-center transform transition-all scale-95 opacity-0" id="successModalContent">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-4xl mx-auto mb-4">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">Application Submitted!</h3>
+                <p class="text-gray-600 mb-6">
+                    Your application has been successfully filed. Please save your reference number for tracking.
+                </p>
+                <div class="bg-gray-100 p-4 rounded-lg mb-6 border-2 border-dashed border-gray-300">
+                    <p class="text-sm text-gray-600">Reference Number</p>
+                    <p class="text-2xl font-mono font-bold text-blue-600" id="successRefNo">-</p>
+                </div>
+                <div class="space-y-2">
+                    <button onclick="printApplication()" class="w-full py-2 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition">
+                        <i class="fas fa-print mr-2"></i>Print Application
+                    </button>
+                    <button onclick="showDashboard()" class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition">
+                        Return to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let currentPermit = null;
+        let currentStep = 1;
+        let formData = {};
+        let totalSteps = 4;
+        let isLoggedIn = false;
+        let currentUser = null;
+        let pendingPermitSelection = null; // Store permit selection if login required
+        
+        const permitTypes = {
+            business: {
+                title: "Unified Business Permit Application",
+                color: "blue",
+                steps: [
+                    "Application Classification",
+                    "Business Information",
+                    "Requirements Upload",
+                    "Review & Submit"
+                ]
+            },
+            zoning: {
+                title: "Zoning Certification Application",
+                color: "green",
+                steps: [
+                    "Application Type",
+                    "Property Details",
+                    "Document Upload",
+                    "Review & Submit"
+                ]
+            },
+            locational: {
+                title: "Locational Clearance Application",
+                color: "purple",
+                steps: [
+                    "Project Classification",
+                    "Project Details",
+                    "Requirements",
+                    "Review & Submit"
+                ]
+            }
+        };
+
+        // Check for existing session on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedSession = localStorage.getItem('cantilan_user_session');
+            if (savedSession) {
+                const session = JSON.parse(savedSession);
+                if (session.expiry > Date.now()) {
+                    loginUser(session.user, false);
+                } else {
+                    localStorage.removeItem('cantilan_user_session');
+                }
+            }
+            generateRandomAppId();
+            updateAuthUI();
+        });
+
+        function generateRandomAppId() {
+            const id = 'CNT-' + Date.now().toString(36).toUpperCase();
+            document.getElementById('appIdDisplay').textContent = id;
+            formData.applicationId = id;
+            formData.dateFiled = new Date().toISOString().split('T')[0];
+        }
+
+        // Authentication Functions
+        function showLoginModal() {
+            const modal = document.getElementById('loginModal');
+            const content = document.getElementById('loginModalContent');
+            modal.classList.remove('hidden');
+            // Trigger animation
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('loginModal');
+            const content = document.getElementById('loginModalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+            document.body.style.overflow = 'auto';
+            
+            // Clear error state
+            document.getElementById('loginError').classList.add('hidden');
+        }
+
+        function showRegisterModal() {
+            closeLoginModal();
+            setTimeout(() => {
+                const modal = document.getElementById('registerModal');
+                const content = document.getElementById('registerModalContent');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }, 300);
+        }
+
+        function closeRegisterModal() {
+            const modal = document.getElementById('registerModal');
+            const content = document.getElementById('registerModalContent');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function switchToLogin() {
+            closeRegisterModal();
+            setTimeout(() => showLoginModal(), 300);
+        }
+
+        function togglePassword() {
+            const input = document.getElementById('loginPassword');
+            const icon = document.getElementById('toggleIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+            
+            // Simulate loading
+            btn.innerHTML = '<div class="loading-spinner border-white border-t-transparent w-5 h-5"></div>';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                // Demo validation (in real app, this would be an API call)
+                if (email && password.length >= 6) {
+                    const user = {
+                        email: email,
+                        firstName: email.split('@')[0],
+                        lastName: 'User',
+                        fullName: email.split('@')[0].replace('.', ' ')
+                    };
+                    loginUser(user, true);
+                    closeLoginModal();
+                    
+                    // If there was a pending permit selection, proceed to it
+                    if (pendingPermitSelection) {
+                        setTimeout(() => {
+                            proceedToPermit(pendingPermitSelection);
+                            pendingPermitSelection = null;
+                        }, 500);
+                    }
+                } else {
+                    document.getElementById('loginError').classList.remove('hidden');
+                    const modal = document.getElementById('loginModalContent');
+                    modal.classList.add('shake');
+                    setTimeout(() => modal.classList.remove('shake'), 500);
+                }
+                
+                btn.innerHTML = '<span>Login</span><i class="fas fa-arrow-right"></i>';
+                btn.disabled = false;
+            }, 1500);
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const btn = document.getElementById('registerBtn');
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirmPassword').value;
+            
+            if (password !== confirm) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            btn.innerHTML = '<div class="loading-spinner border-white border-t-transparent w-5 h-5"></div>';
+            
+            setTimeout(() => {
+                const user = {
+                    email: document.getElementById('regEmail').value,
+                    firstName: document.getElementById('regFirstName').value,
+                    lastName: document.getElementById('regLastName').value,
+                    fullName: document.getElementById('regFirstName').value + ' ' + document.getElementById('regLastName').value
+                };
+                
+                loginUser(user, true);
+                closeRegisterModal();
+                
+                if (pendingPermitSelection) {
+                    setTimeout(() => {
+                        proceedToPermit(pendingPermitSelection);
+                        pendingPermitSelection = null;
+                    }, 500);
+                }
+                
+                btn.innerHTML = 'Create Account';
+            }, 2000);
+        }
+
+        function loginUser(user, remember) {
+            isLoggedIn = true;
+            currentUser = user;
+            
+            // Save session
+            if (remember) {
+                const session = {
+                    user: user,
+                    expiry: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+                };
+                localStorage.setItem('cantilan_user_session', JSON.stringify(session));
+            }
+            
+            updateAuthUI();
+            loadRecentApplications();
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            localStorage.removeItem('cantilan_user_session');
+            updateAuthUI();
+            showDashboard();
+            
+            // Reset recent applications table
+            document.getElementById('recentApplications').innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-4 py-8 text-center text-gray-400">
+                        <i class="fas fa-lock mb-2 text-2xl"></i>
+                        <p>Please login to view your applications</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function updateAuthUI() {
+            const loggedOutNav = document.getElementById('loggedOutNav');
+            const loggedInNav = document.getElementById('loggedInNav');
+            const mobileLoggedOut = document.getElementById('mobileLoggedOut');
+            const mobileLoggedIn = document.getElementById('mobileLoggedIn');
+            const viewAllBtn = document.getElementById('viewAllBtn');
+            const authNotice = document.getElementById('authNotice');
+            
+            if (isLoggedIn) {
+                loggedOutNav.classList.add('hidden');
+                loggedInNav.classList.remove('hidden');
+                loggedInNav.classList.add('flex');
+                mobileLoggedOut.classList.add('hidden');
+                mobileLoggedIn.classList.remove('hidden');
+                viewAllBtn.textContent = 'View All';
+                viewAllBtn.onclick = () => {/* Show all applications logic */};
+                authNotice.classList.add('hidden');
+                
+                // Update user displays
+                document.getElementById('userNameDisplay').textContent = currentUser.fullName || currentUser.firstName;
+                document.getElementById('userEmailDisplay').textContent = currentUser.email;
+                document.getElementById('mobileUserName').textContent = currentUser.fullName || currentUser.firstName;
+                document.getElementById('mobileUserEmail').textContent = currentUser.email;
+            } else {
+                loggedOutNav.classList.remove('hidden');
+                loggedInNav.classList.add('hidden');
+                loggedInNav.classList.remove('flex');
+                mobileLoggedOut.classList.remove('hidden');
+                mobileLoggedIn.classList.add('hidden');
+                viewAllBtn.textContent = 'Login to view all';
+                viewAllBtn.onclick = showLoginModal;
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Permit Selection with Auth Check
+        function selectPermit(type) {
+            if (!isLoggedIn) {
+                pendingPermitSelection = type;
+                showAuthNotice();
+                showLoginModal();
+                return;
+            }
+            proceedToPermit(type);
+        }
+
+        function showAuthNotice() {
+            const notice = document.getElementById('authNotice');
+            notice.classList.remove('hidden');
+            notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function proceedToPermit(type) {
+            currentPermit = type;
+            currentStep = 1;
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('applicationForm').classList.remove('hidden');
+            
+            // Hide auth notice if visible
+            document.getElementById('authNotice').classList.add('hidden');
+            
+            updateProgress();
+            renderCurrentStep();
+            window.scrollTo(0, 0);
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('applicationForm').classList.add('hidden');
+            document.getElementById('authNotice').classList.add('hidden');
+            currentStep = 1;
+            formData = {};
+            generateRandomAppId();
+        }
+
+        function updateProgress() {
+            const percent = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressPercent').textContent = Math.round(percent) + '%';
+            document.getElementById('progressLabel').textContent = `Step ${currentStep} of ${totalSteps}: ${permitTypes[currentPermit].steps[currentStep-1]}`;
+            
+            for (let i = 1; i <= 4; i++) {
+                const indicator = document.getElementById(`stepIndicator${i}`);
+                const circle = indicator.querySelector('div');
+                if (i < currentStep) {
+                    circle.className = 'w-8 h-8 mx-auto rounded-full bg-green-600 text-white flex items-center justify-center mb-1';
+                    circle.innerHTML = '<i class="fas fa-check"></i>';
+                } else if (i === currentStep) {
+                    circle.className = 'w-8 h-8 mx-auto rounded-full bg-blue-600 text-white flex items-center justify-center mb-1';
+                    circle.textContent = i;
+                } else {
+                    circle.className = 'w-8 h-8 mx-auto rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mb-1';
+                    circle.textContent = i;
+                }
+            }
+
+            document.getElementById('prevBtn').classList.toggle('hidden', currentStep === 1);
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = '<span>Submit Application</span><i class="fas fa-paper-plane ml-2"></i>';
+                nextBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                nextBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            } else {
+                nextBtn.innerHTML = '<span>Next Step</span><i class="fas fa-chevron-right ml-2"></i>';
+                nextBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                nextBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+            }
+        }
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateProgress();
+                    renderCurrentStep();
+                    window.scrollTo(0, 0);
+                } else {
+                    submitApplication();
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateProgress();
+                renderCurrentStep();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function validateCurrentStep() {
+            const inputs = document.querySelectorAll('.form-step.active input[required], .form-step.active select[required]');
+            let valid = true;
+            
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    const name = input.name;
+                    const checked = document.querySelector(`input[name="${name}"]:checked`);
+                    if (!checked && input.required) {
+                        input.closest('label')?.classList.add('text-red-600');
+                        valid = false;
+                    }
+                } else if (!input.value.trim()) {
+                    input.classList.add('border-red-500');
+                    valid = false;
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            });
+            
+            if (!valid) {
+                alert('Please fill in all required fields marked with *');
+            }
+            
+            return valid;
+        }
+
+        function renderCurrentStep() {
+            const container = document.getElementById('formContainer');
+            container.innerHTML = '';
+            
+            switch(currentPermit) {
+                case 'business':
+                    renderBusinessStep(container);
+                    break;
+                case 'zoning':
+                    renderZoningStep(container);
+                    break;
+                case 'locational':
+                    renderLocationalStep(container);
+                    break;
+            }
+        }
+
+        // Form Rendering Functions (abbreviated for space - same as previous implementation)
+        function renderBusinessStep(container) {
+            if (currentStep === 1) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Application Classification</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Application Type *</label>
+                                <div class="grid md:grid-cols-3 gap-4">
+                                    ${['New', 'Renewal', 'Additional'].map(type => `
+                                        <div class="checkbox-card border-2 border-gray-200 rounded-xl p-4 cursor-pointer ${formData.appType === type ? 'selected border-blue-500 bg-blue-50' : ''}" 
+                                             onclick="selectOption('appType', '${type}')">
+                                            <input type="radio" name="appType" value="${type}" class="hidden" ${formData.appType === type ? 'checked' : ''}>
+                                            <div class="font-medium text-lg">${type}</div>
+                                            <div class="text-xs text-gray-500 mt-1">
+                                                ${type === 'New' ? 'First time application' : type === 'Renewal' ? 'Annual renewal' : 'Additional business activity'}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Payment Mode *</label>
+                                <div class="grid md:grid-cols-3 gap-4">
+                                    ${['Annually', 'Bi-annually', 'Quarterly'].map(mode => `
+                                        <div class="checkbox-card border-2 border-gray-200 rounded-xl p-4 cursor-pointer ${formData.paymentMode === mode ? 'selected border-blue-500 bg-blue-50' : ''}" 
+                                             onclick="selectOption('paymentMode', '${mode}')">
+                                            <input type="radio" name="paymentMode" value="${mode}" class="hidden" ${formData.paymentMode === mode ? 'checked' : ''}>
+                                            <div class="font-medium">${mode}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Fiscal Year</label>
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" 
+                                           value="${new Date().getFullYear()}" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Date of Receipt</label>
+                                    <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" 
+                                           value="${new Date().toISOString().split('T')[0]}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 2) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Business Information</h3>
+                        <div class="space-y-6">
+                            <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                <h4 class="font-bold text-blue-900 mb-4 flex items-center">
+                                    <i class="fas fa-building mr-2"></i> Business Details
+                                </h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Business Name *</label>
+                                        <input type="text" name="businessName" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.businessName || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Trade Name/Franchise</label>
+                                        <input type="text" name="tradeName" class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.tradeName || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">DTI/SEC/CDA Reg. No. *</label>
+                                        <input type="text" name="regNumber" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.regNumber || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                                <h4 class="font-bold text-green-900 mb-4 flex items-center">
+                                    <i class="fas fa-user mr-2"></i> Owner Information
+                                </h4>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Business Type *</label>
+                                    <div class="flex flex-wrap gap-4">
+                                        ${['Sole Proprietorship', 'Partnership', 'Corporation', 'Cooperative', 'One Person Corporation'].map(type => `
+                                            <label class="inline-flex items-center cursor-pointer">
+                                                <input type="radio" name="businessType" value="${type}" class="form-radio text-blue-600" 
+                                                       ${formData.businessType === type ? 'checked' : ''} onchange="updateFormData(this)">
+                                                <span class="ml-2 text-sm">${type}</span>
+                                            </label>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                <div class="grid md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Surname *</label>
+                                        <input type="text" name="ownerSurname" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.ownerSurname || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                                        <input type="text" name="ownerFirstName" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.ownerFirstName || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+                                        <input type="text" name="ownerMiddleName" class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.ownerMiddleName || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Tax Identification Number (TIN) *</label>
+                                        <input type="text" name="tin" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.tin || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                                        <input type="email" name="email" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.email || currentUser?.email || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 3) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Documentary Requirements</h3>
+                        <p class="text-gray-600 mb-6">Please upload clear scanned copies or photos of the following requirements:</p>
+                        <div class="space-y-4">
+                            ${[
+                                {name: 'dti_reg', label: 'DTI/SEC/CDA Registration', required: true, icon: 'certificate'},
+                                {name: 'lease_contract', label: 'Lease Contract/Title/Tax Declaration', required: true, icon: 'file-contract'},
+                                {name: 'occupancy_permit', label: 'Occupancy Permit (for new business)', required: false, icon: 'home'},
+                                {name: 'fire_permit', label: 'Fire Safety Inspection Certificate', required: true, icon: 'fire-extinguisher'},
+                                {name: 'sanitary_permit', label: 'Health and Sanitary Permit', required: true, icon: 'notes-medical'}
+                            ].map(doc => `
+                                <div class="document-preview p-4 rounded-xl bg-white border-2 cursor-pointer relative" 
+                                     onclick="document.getElementById('file_${doc.name}').click()"
+                                     id="preview_${doc.name}">
+                                    <input type="file" id="file_${doc.name}" class="hidden" accept=".pdf,.jpg,.jpeg,.png" 
+                                           onchange="handleFileUpload(this, '${doc.name}', '${doc.label}')">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
+                                                <i class="fas fa-${doc.icon} text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium text-gray-900">${doc.label} ${doc.required ? '<span class="text-red-500">*</span>' : ''}</h4>
+                                                <p class="text-xs text-gray-500 status-text">Click to upload (PDF, JPG, PNG)</p>
+                                            </div>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-gray-400"></i>
+                                    </div>
+                                    <div class="uploaded-file hidden mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2 text-green-700">
+                                                <i class="fas fa-check-circle"></i>
+                                                <span class="text-sm font-medium filename-display">File uploaded</span>
+                                            </div>
+                                            <button onclick="event.stopPropagation(); removeFile('${doc.name}')" class="text-red-500 hover:text-red-700">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                renderReviewStep(container);
+            }
+        }
+
+        function renderZoningStep(container) {
+            if (currentStep === 1) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Application Type</h3>
+                        <div class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="checkbox-card border-2 border-gray-200 rounded-xl p-6 cursor-pointer ${formData.zoningType === 'Zoning Certification' ? 'selected border-green-500 bg-green-50' : ''}" 
+                                     onclick="selectOption('zoningType', 'Zoning Certification')">
+                                    <div class="text-3xl mb-3 text-green-600"><i class="fas fa-certificate"></i></div>
+                                    <h4 class="font-bold mb-2">Zoning Certification</h4>
+                                    <p class="text-sm text-gray-600">Verify land use compliance and zoning classification</p>
+                                </div>
+                                <div class="checkbox-card border-2 border-gray-200 rounded-xl p-6 cursor-pointer ${formData.zoningType === 'Zoning Clearance' ? 'selected border-green-500 bg-green-50' : ''}" 
+                                     onclick="selectOption('zoningType', 'Zoning Clearance')">
+                                    <div class="text-3xl mb-3 text-blue-600"><i class="fas fa-clipboard-check"></i></div>
+                                    <h4 class="font-bold mb-2">Zoning Clearance</h4>
+                                    <p class="text-sm text-gray-600">For construction and development projects</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 2) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Property & Applicant Details</h3>
+                        <div class="space-y-6">
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                                <h4 class="font-bold text-green-900 mb-4">Applicant Information</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name of Applicant *</label>
+                                        <input type="text" name="applicantName" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.applicantName || currentUser?.fullName || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Address of Applicant *</label>
+                                        <input type="text" name="applicantAddress" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.applicantAddress || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                <h4 class="font-bold text-blue-900 mb-4">Property Details</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Name of Registered Owner *</label>
+                                        <input type="text" name="registeredOwner" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.registeredOwner || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Location of Lot *</label>
+                                        <input type="text" name="propertyLocation" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.propertyLocation || ''}" onchange="updateFormData(this)" placeholder="Street, Barangay, Municipality, Province">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Total Area (hectares) *</label>
+                                        <input type="number" step="0.001" name="lotArea" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.lotArea || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Right over Land *</label>
+                                        <select name="landRight" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" onchange="updateFormData(this)">
+                                            <option value="">Select...</option>
+                                            <option value="Owner" ${formData.landRight === 'Owner' ? 'selected' : ''}>Owner</option>
+                                            <option value="Lessee" ${formData.landRight === 'Lessee' ? 'selected' : ''}>Lessee</option>
+                                            <option value="Tenant" ${formData.landRight === 'Tenant' ? 'selected' : ''}>Tenant</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 3) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Required Documents</h3>
+                        <div class="space-y-4">
+                            <div class="document-preview p-4 rounded-xl bg-white border-2" 
+                                 onclick="document.getElementById('file_vicinity').click()" id="preview_vicinity">
+                                <input type="file" id="file_vicinity" class="hidden" accept=".pdf,.jpg,.jpeg,.png" 
+                                       onchange="handleFileUpload(this, 'vicinity', 'Vicinity Map')">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                                            <i class="fas fa-map text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-900">Vicinity Map <span class="text-red-500">*</span></h4>
+                                            <p class="text-xs text-gray-500">Drawn to appropriate scale</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-upload text-gray-400"></i>
+                                </div>
+                                <div class="uploaded-file hidden mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2 text-green-700">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span class="filename-display text-sm">File uploaded</span>
+                                        </div>
+                                        <button onclick="event.stopPropagation(); removeFile('vicinity')" class="text-red-500 hover:text-red-700">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                renderReviewStep(container);
+            }
+        }
+
+        function renderLocationalStep(container) {
+            if (currentStep === 1) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Project Classification</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Project Nature *</label>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    ${['New Development', 'Renovation', 'Expansion', 'Temporary Structure'].map(type => `
+                                        <div class="checkbox-card border-2 border-gray-200 rounded-xl p-4 cursor-pointer ${formData.projectNature === type ? 'selected border-purple-500 bg-purple-50' : ''}" 
+                                             onclick="selectOption('projectNature', '${type}')">
+                                            <input type="radio" name="projectNature" value="${type}" class="hidden" ${formData.projectNature === type ? 'checked' : ''}>
+                                            <div class="font-medium">${type}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Project Tenure *</label>
+                                <div class="flex gap-4">
+                                    ${['Permanent', 'Temporary'].map(tenure => `
+                                        <label class="flex-1 checkbox-card border-2 border-gray-200 rounded-xl p-4 cursor-pointer text-center ${formData.projectTenure === tenure ? 'selected border-purple-500 bg-purple-50' : ''}">
+                                            <input type="radio" name="projectTenure" value="${tenure}" class="hidden" 
+                                                   ${formData.projectTenure === tenure ? 'checked' : ''} onchange="updateFormData(this)">
+                                            <div class="font-medium">${tenure}</div>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 2) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">Project Details</h3>
+                        <div class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Project Name *</label>
+                                    <input type="text" name="projectName" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                           value="${formData.projectName || ''}" onchange="updateFormData(this)">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Project Type *</label>
+                                    <input type="text" name="projectType" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                           value="${formData.projectType || ''}" onchange="updateFormData(this)" placeholder="e.g., Residential Subdivision">
+                                </div>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                                <h4 class="font-bold text-purple-900 mb-4">Applicant Details</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Name of Applicant *</label>
+                                        <input type="text" name="locApplicantName" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.locApplicantName || currentUser?.fullName || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Project Cost (PHP) *</label>
+                                        <input type="number" name="projectCost" required class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" 
+                                               value="${formData.projectCost || ''}" onchange="updateFormData(this)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 3) {
+                container.innerHTML = `
+                    <div class="form-step active fade-in">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900">HLURB Requirements</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            ${[
+                                {name: 'loc_project_plan', label: 'Project Plan/Site Development Plan', icon: 'blueprint'},
+                                {name: 'loc_tct', label: 'TCT/Proof of Ownership', icon: 'file-signature'},
+                                {name: 'loc_tax_dec', label: 'Tax Declaration', icon: 'file-invoice'}
+                            ].map(doc => `
+                                <div class="document-preview p-4 rounded-xl bg-white border-2 cursor-pointer" 
+                                     onclick="document.getElementById('file_${doc.name}').click()" id="preview_${doc.name}">
+                                    <input type="file" id="file_${doc.name}" class="hidden" accept=".pdf,.jpg,.jpeg,.png" 
+                                           onchange="handleFileUpload(this, '${doc.name}', '${doc.label}')">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600">
+                                            <i class="fas fa-${doc.icon}"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="font-medium text-sm text-gray-900">${doc.label}</h4>
+                                            <p class="text-xs text-gray-500 status-text">Click to upload</p>
+                                        </div>
+                                    </div>
+                                    <div class="uploaded-file hidden mt-2 p-2 bg-green-50 rounded border border-green-200 flex justify-between items-center">
+                                        <span class="text-xs text-green-700 filename-display">Uploaded</span>
+                                        <button onclick="event.stopPropagation(); removeFile('${doc.name}')" class="text-red-500 text-xs">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                renderReviewStep(container);
+            }
+        }
+
+        function renderReviewStep(container) {
+            let summaryHTML = `
+                <div class="form-step active fade-in">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900">Review Your Application</h3>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 mt-1"></i>
+                            <div>
+                                <p class="text-sm text-yellow-800 font-medium">Declaration</p>
+                                <p class="text-sm text-yellow-700 mt-1">
+                                    Please review all information carefully. By submitting, you declare under penalty of perjury that all information is true and correct.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 rounded-lg p-4 border border-blue-100 mb-6">
+                        <h4 class="font-bold text-blue-900 mb-3">Applicant Account</h4>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">${currentUser?.fullName || currentUser?.firstName}</p>
+                                <p class="text-sm text-gray-600">${currentUser?.email}</p>
+                            </div>
+                        </div>
+                    </div>
+            `;
+
+            summaryHTML += `
+                    <div class="border-t pt-6 mt-6">
+                        <label class="flex items-start space-x-3 cursor-pointer">
+                            <input type="checkbox" required class="mt-1 w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500" id="declarationCheck">
+                            <span class="text-sm text-gray-700 leading-relaxed">
+                                I DECLARE UNDER PENALTY OF PERJURY that all information in this application are true and correct based on my personal knowledge and authentic records submitted. Any false or misleading information shall be grounds for legal action and automatically revokes the permit. I agree to the Data Privacy Act terms and allow the Municipality of Cantilan to process my personal information.
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = summaryHTML;
+        }
+
+        // Helper Functions
+        function selectOption(field, value) {
+            formData[field] = value;
+            renderCurrentStep();
+        }
+
+        function updateFormData(input) {
+            if (input.type === 'checkbox') {
+                formData[input.name] = input.checked;
+            } else if (input.type === 'radio') {
+                if (input.checked) formData[input.name] = input.value;
+            } else {
+                formData[input.name] = input.value;
+            }
+        }
+
+        function updateCheckboxData(input, fieldName) {
+            if (!formData[fieldName]) formData[fieldName] = [];
+            if (input.checked) {
+                formData[fieldName].push(input.value);
+            } else {
+                formData[fieldName] = formData[fieldName].filter(v => v !== input.value);
+            }
+        }
+
+        function handleFileUpload(input, fieldName, label) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    input.value = '';
+                    return;
+                }
+                
+                if (!formData.uploadedFiles) formData.uploadedFiles = [];
+                const existingIndex = formData.uploadedFiles.findIndex(f => f.field === fieldName);
+                if (existingIndex >= 0) {
+                    formData.uploadedFiles[existingIndex] = {field: fieldName, label: label, name: file.name};
+                } else {
+                    formData.uploadedFiles.push({field: fieldName, label: label, name: file.name});
+                }
+
+                const preview = document.getElementById(`preview_${fieldName}`);
+                preview.classList.add('has-file');
+                preview.querySelector('.status-text').textContent = 'File uploaded successfully';
+                preview.querySelector('.uploaded-file').classList.remove('hidden');
+                preview.querySelector('.filename-display').textContent = file.name;
+            }
+        }
+
+        function removeFile(fieldName) {
+            if (formData.uploadedFiles) {
+                formData.uploadedFiles = formData.uploadedFiles.filter(f => f.field !== fieldName);
+            }
+            
+            const input = document.getElementById(`file_${fieldName}`);
+            if (input) input.value = '';
+            
+            const preview = document.getElementById(`preview_${fieldName}`);
+            preview.classList.remove('has-file');
+            preview.querySelector('.status-text').textContent = 'Click to upload (PDF, JPG, PNG)';
+            preview.querySelector('.uploaded-file').classList.add('hidden');
+        }
+
+        function submitApplication() {
+            const declaration = document.getElementById('declarationCheck');
+            if (!declaration || !declaration.checked) {
+                alert('Please check the declaration checkbox to proceed.');
+                return;
+            }
+
+            const btn = document.getElementById('nextBtn');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<div class="loading-spinner border-white border-t-transparent w-5 h-5 mr-2"></div> Submitting...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const applications = JSON.parse(localStorage.getItem('cantilan_applications') || '[]');
+                applications.push({
+                    ref: formData.applicationId,
+                    type: permitTypes[currentPermit].title,
+                    date: formData.dateFiled,
+                    status: 'Pending Verification',
+                    applicant: currentUser?.email
+                });
+                localStorage.setItem('cantilan_applications', JSON.stringify(applications));
+
+                document.getElementById('successRefNo').textContent = formData.applicationId;
+                const modal = document.getElementById('successModal');
+                const content = document.getElementById('successModalContent');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+                
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        function loadRecentApplications() {
+            if (!isLoggedIn) return;
+            
+            const allApps = JSON.parse(localStorage.getItem('cantilan_applications') || '[]');
+            const userApps = allApps.filter(app => app.applicant === currentUser?.email).slice(-5).reverse();
+            const tbody = document.getElementById('recentApplications');
+            
+            if (userApps.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-4 py-8 text-center text-gray-400">
+                            <i class="fas fa-folder-open text-3xl mb-2"></i>
+                            <p>No applications yet. Start by applying for a permit above.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = userApps.map(app => `
+                <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                    <td class="px-4 py-3 font-mono text-blue-600 font-semibold">${app.ref}</td>
+                    <td class="px-4 py-3">${app.type}</td>
+                    <td class="px-4 py-3">${app.date}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">${app.status}</span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium">View Details</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function printApplication() {
+            window.print();
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) closeLoginModal();
+        });
+        
+        document.getElementById('registerModal').addEventListener('click', function(e) {
+            if (e.target === this) closeRegisterModal();
+        });
+        
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
